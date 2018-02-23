@@ -14,9 +14,10 @@ class App extends Component {
 
         <div className="search">
             <input type="text" className="searchTerm" placeholder="Who are you looking for?"/>
+            {/* delete the button when auto search result is integrated
             <button type="submit" className="searchButton">
               Search
-           </button>
+           </button>*/}
          </div>
 
         <div className="Content">
@@ -28,13 +29,16 @@ class App extends Component {
           </button>
 
           <table className="tutorTable">
+            <col width="30%"/>
+            <col width="40%"/>
+            <col width="30%"/>
             <tr>
               <th>Tutor</th>
               <th>Subject(s)</th>
               <th># Students</th>
             </tr>
             <tr>
-              <td>Casey Klecan</td>
+              <td>Casey Klecan <button className="searchButton" onClick={approveTutor}>Approve</button></td>
               <td>math, computer science</td>
               <td>2</td>
             </tr>
@@ -46,6 +50,9 @@ class App extends Component {
           </table>
 
           <table className="tutorTable">
+          <col width="30%"/>
+          <col width="40%"/>
+          <col width="30%"/>
             <tr>
               <th>Student</th>
               <th>Subject(s)</th>
@@ -59,7 +66,7 @@ class App extends Component {
             <tr>
               <td>Courtney Wood</td>
               <td>computer science</td>
-              <td>Casey Klecan</td>
+              <td><button className="searchButton" onClick={matchStudent}>Match</button></td>
             </tr>
           </table>
         </div>
@@ -73,4 +80,13 @@ export default App;
 
 function approveAll() {
   // todo connect to backend, approve all tutors
+}
+
+function approveTutor() {
+  // todo approve the selected tutor
+
+}
+
+function matchStudent() {
+  // todo match the student clicked to a tutor
 }
