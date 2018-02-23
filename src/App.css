@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700');
+
+.App {
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+}
+
+.App-header {
+  background-color: #007AFF;
+  height: 10%;
+  padding: 20px;
+  color: white;
+  margin-bottom: 0;
+}
+
+.App-title {
+  font-size: 1.6em;
+  font-weight: 400;
+}
+
+.Content {
+  text-align: left;
+  margin: 7.5%;
+  font-weight: 300;
+  font-size: large;
+}
+
+.search {
+  margin-bottom: 64px;
+  margin-top: 2.5%;
+  padding: 0;
+  text-align: center;
+}
+
+.searchTerm {
+  width: 70%;
+  font-size: medium;
+  padding: 1.5%;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+}
+
+.searchButton {
+  background-color: #007AFF;
+  color: white;
+  box-shadow: none;
+  border-radius: 0;
+  font-size: medium;
+  padding: 1.5%;
+  border-color: #007AFF;
+  border-radius: 2px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.approve {
+  background-color: #007AFF;
+  color: white;
+  font-size: medium;
+  padding: 1.5%;
+  border-radius: 3px;
+  border: none;
+  box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2);
+  transition-duration: .6s;
+}
+
+.approve:hover {
+  color: #007AFF;
+  background-color: white;
+}
+
+.tutorTable {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  width: 100%;
+  height: 20%;
+}
+
+td, th {
+  padding: 8px;
+}
+
+tr:nth-child(odd) {
+  background-color: #F2F2F2;
+}
