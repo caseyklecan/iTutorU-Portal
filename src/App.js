@@ -1,9 +1,28 @@
 import React, { Component } from 'react';
+import { returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize} from './FirebaseManager';
+import TutorTable from './TutorTable';
+import StudentTable from './StudentTable';
 import './App.css';
 
 class App extends Component {
 
+  state = {
+      tutorData: {},
+      studentData: {}
+    }
 
+    componentWillMount() {
+      initialize().then(res =>
+        returnTutorData().then(res => {
+          this.setState({ tutorData: res });
+          console.log("WE HAVE DATA IT IS " + this.state.tutorData);
+        }),
+
+        returnStudentData().then(res => {
+          this.setState({ studentData: res});
+        })
+      );
+    }
 
   render() {
     return (
@@ -28,47 +47,11 @@ class App extends Component {
             Approve Pending Tutors
           </button>
 
-          <table className="tutorTable">
-            <col width="30%"/>
-            <col width="40%"/>
-            <col width="30%"/>
-            <tr>
-              <th>Tutor</th>
-              <th>Subject(s)</th>
-              <th># Students</th>
-            </tr>
-            <tr>
-              <td>Casey Klecan <button className="searchButton" onClick={approveTutor}>Approve</button></td>
-              <td>math, computer science</td>
-              <td>2</td>
-            </tr>
-            <tr>
-              <td>Casey Klecan</td>
-              <td>math, computer science</td>
-              <td>2</td>
-            </tr>
-          </table>
+          <TutorTable className="tutorTable" data={this.state.tutorData} />
 
-          <table className="tutorTable">
-          <col width="30%"/>
-          <col width="40%"/>
-          <col width="30%"/>
-            <tr>
-              <th>Student</th>
-              <th>Subject(s)</th>
-              <th>Tutor</th>
-            </tr>
-            <tr>
-              <td>Megan Wood</td>
-              <td>math</td>
-              <td>Casey Klecan</td>
-            </tr>
-            <tr>
-              <td>Courtney Wood</td>
-              <td>computer science</td>
-              <td><button className="searchButton" onClick={matchStudent}>Match</button></td>
-            </tr>
-          </table>
+          <StudentTable className="tutorTable" data = {this.state.studentData} />
+
+
         </div>
 
       </div>

@@ -76,6 +76,30 @@
   background-color: white;
 }
 
+.view {
+  background-color: #007AFF;
+  color: white;
+  font-size: medium;
+  padding: 5%;
+  border-radius: 3px;
+  border: none;
+  box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2);
+  transition-duration: .6s;
+  margin-right: 10;
+}
+
+.option {
+  background-color: #FF0000;
+  color: white;
+  font-size: medium;
+  padding: 5%;
+  border-radius: 3px;
+  border: none;
+  box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2);
+  transition-duration: .6s;
+  margin-right: 10;
+}
+
 .tutorTable {
   margin-top: 5%;
   margin-bottom: 5%;
