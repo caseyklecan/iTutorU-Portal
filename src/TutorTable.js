@@ -10,18 +10,18 @@ class TutorTable extends Component {
     console.log("len: " + len);
     for (var i = 0; i < len; i++) {
       var tutor = this.props.data[i];
-      //console.log("got tutor, email = " + tutor['email']);
+      console.log("got tutor, info = " + JSON.stringify(this.props.data[i]['childKey']));
       tutor_list.push(tutor);
     }
 
 
     return(
       tutor_list.map((item) => {
-        console.log("creating a row: " + item.name);
         return <TableRow
-          name={item.name}
-          subjects={item.subjects}
-          email={item.email}
+          name={item.childData.name}
+          subjects={item.childData.subjects}
+          email={item.childData.email}
+          uid = {item.childKey}
           allData={item}
         />
       }

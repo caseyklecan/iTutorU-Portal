@@ -1,5 +1,7 @@
 import React, { Component, Button } from 'react';
 import Popup from './Popup';
+import { Link , Route } from 'react-router-dom';
+import ViewProfile from './ViewProfile';
 
 export default class TableRow extends Component {
 
@@ -8,25 +10,29 @@ export default class TableRow extends Component {
     buttonText: "View"
   }
 
-  onClickView() {
-    console.log("PRESSED BUTTON");
-    if (this.state.buttonText === "View") {
-      this.setState({buttonText: "Hide", showPopup: true})
-
-    }
-    else {
-      this.setState({buttonText: "View", showPopup: false})
+  closePopup = (dataFromPopup) => {
+    if (dataFromPopup === false) {
+      this.setState({showPopup: false});
     }
   }
 
+  onClickView() {
+    if (this.state.showPopup === false) {
+      this.setState({showPopup : true});
+    }
+  }
+
+
   render() {
+    console.log("data = " + JSON.stringify(this.props));
     return (
       <tr>
         <td>{this.props.name}</td>
         <td>{this.props.subjects}</td>
         <td>{this.props.email}</td>
+        {/*}<Link to={'./profile/' + this.props.uid}>View</Link>*/}
         <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
-        {this.state.showPopup ? <Popup data={this.props.allData}/> : null}
+        {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Tutor" /> : null}
         <button className="option">Approve</button>
       </tr>
     );
@@ -41,13 +47,18 @@ export class StudentTableRow extends Component {
   }
 
   onClickView() {
-    console.log("PRESSED BUTTON");
     if (this.state.buttonText === "View") {
-      this.setState({buttonText: "Hide", showPopup: true})
+      this.setState({ showPopup: true})
 
     }
     else {
       this.setState({buttonText: "View", showPopup: false})
+    }
+  }
+
+  closePopup = (dataFromPopup) => {
+    if (dataFromPopup === false) {
+      this.setState({showPopup: false});
     }
   }
 
@@ -57,10 +68,11 @@ export class StudentTableRow extends Component {
         <td>{this.props.studentName}</td>
         <td>{this.props.subjects}</td>
         <td>{this.props.grade}</td>
+
         <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
-        {this.state.showPopup ? <Popup data={this.props.allData}/> : null}
+        {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Student" /> : null}
         <button className="option">Match</button>
-      </tr>
+        </tr>
     );
   }
 }

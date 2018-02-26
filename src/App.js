@@ -3,18 +3,28 @@ import { returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, ini
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch
+} from 'react-router-dom';
+import Popup from './Popup'
+
 
 class App extends Component {
 
   state = {
       tutorData: {},
-      studentData: {}
+      studentData: {},
+      initialized: false
     }
 
     componentWillMount() {
+      if (this.state.initialized == false) {
       initialize().then(res =>
         returnTutorData().then(res => {
-          this.setState({ tutorData: res });
+          this.setState({ tutorData: res});
           console.log("WE HAVE DATA IT IS " + this.state.tutorData);
         }),
 
@@ -22,6 +32,8 @@ class App extends Component {
           this.setState({ studentData: res});
         })
       );
+    }
+      this.setState({initialized: true})
     }
 
   render() {

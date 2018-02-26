@@ -29,7 +29,7 @@ export function returnTutorData() {
         snapshot.forEach(function(childSnapshot) {
           var childKey = childSnapshot.key;
           var childData = childSnapshot.val();
-          tutor_list.push(childData);
+          tutor_list.push({childData, childKey});
         });
         resolve(tutor_list);
         //resolve(snapshot.val());
@@ -52,6 +52,20 @@ export function returnStudentData() {
       resolve(student_list);
       //resolve(snapshot.val());
     }).catch((error) => {
+      reject(error);
+    });
+  })
+}
+
+export function returnTutor(uid) {
+  console.log("uid: " + uid);
+  console.log("IN RETURN TUTOR");
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('tutors/' + uid).once('value').then(function(snapshot) {
+
+          resolve(snapshot);
+        }
+    ).catch((error) => {
       reject(error);
     });
   })

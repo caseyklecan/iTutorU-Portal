@@ -1,0 +1,13 @@
+.popup {
+  position: relative;
+}
+
+.closebutton {
+  align-self: right;
+  background-color: #d63031;
+  color: white;
+  box-shadow: none;
+  border-radius: 0;
+  font-size: medium;
+  padding: 1.5%;
+}
