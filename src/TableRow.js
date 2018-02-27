@@ -2,6 +2,7 @@ import React, { Component, Button } from 'react';
 import Popup from './Popup';
 import { Link , Route } from 'react-router-dom';
 import ViewProfile from './ViewProfile';
+import './App.css';
 
 export default class TableRow extends Component {
 
@@ -33,7 +34,7 @@ export default class TableRow extends Component {
         {/*}<Link to={'./profile/' + this.props.uid}>View</Link>*/}
         <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
         {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Tutor" /> : null}
-        <button className="option">Approve</button>
+        <button className="approve">Approve</button>
       </tr>
     );
   }
@@ -71,7 +72,6 @@ export class StudentTableRow extends Component {
 
         <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
         {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Student" /> : null}
-        <button className="option">Match</button>
         </tr>
     );
   }

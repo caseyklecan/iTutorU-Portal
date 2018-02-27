@@ -45,17 +45,13 @@ class App extends Component {
 
         <div className="search">
             <input type="text" className="searchTerm" placeholder="Who are you looking for?"/>
-            {/* delete the button when auto search result is integrated
-            <button type="submit" className="searchButton">
-              Search
-           </button>*/}
          </div>
 
         <div className="Content">
           <p>
             For now, the button below approves all pending tutors.
           </p>
-          <button className="approve" onClick={approveAll}>
+          <button className="approveAll" onClick={approveAll}>
             Approve Pending Tutors
           </button>
 
@@ -80,8 +76,4 @@ function approveAll() {
 function approveTutor() {
   // todo approve the selected tutor
 
-}
-
-function matchStudent() {
-  // todo match the student clicked to a tutor
 }

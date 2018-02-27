@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "firebase": "^4.10.1",
+    "process": "^0.11.10",
     "react": "^16.2.0",
     "react-autosuggest": "^9.3.4",
     "react-dom": "^16.2.0",
     "react-modal": "^3.3.1",
     "react-overlays": "^0.8.3",
-    "react-scripts": "1.1.1"
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "^1.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StudentTableRow } from './TableRow';
 import Popup from './Popup';
+import './App.css';
 
 class StudentTable extends Component {
   constructor(props) {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TableRow from './TableRow';
+import './App.css';
 
 class TutorTable extends Component {
 

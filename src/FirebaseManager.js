@@ -16,7 +16,7 @@ export function initialize() {
         console.log("Signed in successfully: " + res);
         resolve(true);
       }
-      );
+    );
     })
 
 }
