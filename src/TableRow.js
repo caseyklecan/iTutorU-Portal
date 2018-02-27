@@ -2,17 +2,23 @@ import React, { Component, Button } from 'react';
 import Popup from './Popup';
 import { Link , Route } from 'react-router-dom';
 import ViewProfile from './ViewProfile';
+import {approveTutor} from './FirebaseManager';
 
 export default class TableRow extends Component {
 
   state = {
     showPopup: false,
-    buttonText: "View"
+    buttonText: this.props.pending ? "Contact" : "View",
+    pending: this.props.pending,
+    approved: false,
   }
 
   closePopup = (dataFromPopup) => {
     if (dataFromPopup === false) {
       this.setState({showPopup: false});
+    }
+    if (this.state.approved == true) {
+      this.setState({approved: false});
     }
   }
 
@@ -22,9 +28,13 @@ export default class TableRow extends Component {
     }
   }
 
+  onClickApprove() {
+    this.setState({pending: false, approved: true})
+    {/*approveTutor(this.props.uid); (uncomment this later when we actually want to modify database));*/}
+  }
+
 
   render() {
-    console.log("data = " + JSON.stringify(this.props));
     return (
       <tr>
         <td>{this.props.name}</td>
@@ -32,8 +42,9 @@ export default class TableRow extends Component {
         <td>{this.props.email}</td>
         {/*}<Link to={'./profile/' + this.props.uid}>View</Link>*/}
         <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
-        {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Tutor" /> : null}
-        <button className="option">Approve</button>
+        {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Tutor" pending = {this.props.pending} /> : null}
+        {this.props.pending ? <button className="option" onClick={() => this.onClickApprove()}>Approve</button> : null }
+        {this.state.approved ? <Popup text="Tutor is approved!" call={this.closePopup} pending ={this.props.pending} /> : null}
       </tr>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-overlays';
+import {getStudentsOfTutor} from './FirebaseManager';
 
 
 let rand = ()=> (Math.floor(Math.random() * 20) - 10);
@@ -40,26 +41,62 @@ const dialogStyle = function() {
 class Popup extends React.Component {
   state = {
     showModal: true,
+    students: [],
   }
 
   onClickClose() {
     this.setState({showModal : false})
   }
 
+  componentWillMount() {
+    if (!this.props.pending) {
+    getStudentsOfTutor(this.props.data.childKey).then(res => {
+      this.setState({ students: res})
+    });
+  }
+  }
+
+  showStudents() {
+    return this.state.students.map((name) =>
+       <li>{name}</li>
+    );
+  }
+
   showData(type) {
     if (type === "Tutor") {
-      return (
-        <div>
-        <h4>{this.props.data.childData.name}</h4>
-        <h4>Type: {this.props.type}</h4>
-        <h4>Subject(s): {this.props.data.childData.subjects}</h4>
-        <h4>City: {this.props.data.childData.city}</h4>
-        <h4>Degree: {this.props.data.childData.degree}</h4>
-        </div>
-      );
+
+      if (this.props.pending == true) {
+        return (
+          <div>
+          <h2>{this.props.data.childData.name}</h2>
+          <h4>Email: {this.props.data.childData.email}</h4>
+          <h4>Phone Number: {this.props.data.childData.phone}</h4>
+          </div>
+        );
+
+      }
+      else {
+
+
+        return (
+          <div>
+          <h2>{this.props.data.childData.name}</h2>
+          <h4>Type: {this.props.type}</h4>
+          <h4>Subject(s): {this.props.data.childData.subjects}</h4>
+          <h4>City: {this.props.data.childData.city}</h4>
+          <h4>Degree: {this.props.data.childData.degree}</h4>
+
+          <h3>Students</h3>
+          {this.showStudents()}
+
+
+          </div>
+        );
+      }
+
 
     }
-    else {
+    else if (type == "Student"){
       return (
         <div>
         <h4>{this.props.data.studentName}</h4>
@@ -71,10 +108,16 @@ class Popup extends React.Component {
       );
 
     }
+    else {
+      return (
+        <div>
+          <h2>{this.props.text}</h2>
+        </div>
+      );
+    }
   }
 
   render() {
-    console.log("IN POPUP, data = " + JSON.stringify(this.props));
     return (
         <Modal
           aria-labelledby='modal-label'

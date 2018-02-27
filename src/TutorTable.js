@@ -4,13 +4,10 @@ import TableRow from './TableRow';
 class TutorTable extends Component {
 
   renderRows() {
-    console.log("props.data: " + JSON.stringify(this.props));
     var tutor_list = []
     var len = this.props.data.length;
-    console.log("len: " + len);
     for (var i = 0; i < len; i++) {
       var tutor = this.props.data[i];
-      console.log("got tutor, info = " + JSON.stringify(this.props.data[i]['childKey']));
       tutor_list.push(tutor);
     }
 
@@ -22,6 +19,7 @@ class TutorTable extends Component {
           subjects={item.childData.subjects}
           email={item.childData.email}
           uid = {item.childKey}
+          pending = {this.props.pending}
           allData={item}
         />
       }
