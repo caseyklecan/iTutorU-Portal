@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize} from './FirebaseManager';
+import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize} from './FirebaseManager';
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
 import './App.css';
@@ -17,7 +17,9 @@ class App extends Component {
   state = {
       tutorData: {},
       studentData: {},
-      initialized: false
+      pendingTutors: {},
+      initialized: false,
+      arePendingTutors: true
     }
 
     componentWillMount() {
@@ -25,11 +27,17 @@ class App extends Component {
       initialize().then(res =>
         returnTutorData().then(res => {
           this.setState({ tutorData: res});
-          console.log("WE HAVE DATA IT IS " + this.state.tutorData);
         }),
 
         returnStudentData().then(res => {
           this.setState({ studentData: res});
+        }),
+
+        returnPendingTutors().then(res => {
+          this.setState({pendingTutors: res});
+          if (res.length == 0) {
+            this.setState({arePendingTutors : false})
+          }
         })
       );
     }
@@ -55,8 +63,16 @@ class App extends Component {
             Approve Pending Tutors
           </button>
 
-          <TutorTable className="tutorTable" data={this.state.tutorData} />
 
+          <h2>Pending tutors</h2>
+          {this.state.arePendingTutors ? <TutorTable className="tutorTable" data={this.state.pendingTutors} pending = {true} /> : <h4>No pending tutors at this time.</h4> }
+
+
+          <h2>All Tutors</h2>
+          <TutorTable className="tutorTable" data={this.state.tutorData} pending = {false} />
+
+
+          <h2>All Students</h2>
           <StudentTable className="tutorTable" data = {this.state.studentData} />
 
 

@@ -13,18 +13,58 @@ export function initialize() {
     firebase.initializeApp(config);
     return new Promise((resolve, reject) => {
       signIn("testing@test.com", "password").then(res => {
-        console.log("Signed in successfully: " + res);
         resolve(true);
       }
     );
     })
 
+
+}
+
+export function approveTutor(uid) {
+  //write to database and set frozen to be false
+  var updates = {};
+  updates['tutors/' + uid + '/frozen'] = false;
+  firebase.database().ref().update(updates);
+}
+
+export function getStudentsOfTutor(uid) {
+  var students = [];
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('tutors/' + uid + '/students/').once('value').then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+          var studentName = childSnapshot.val();
+          students.push(studentName);
+        });
+        resolve(students);
+    }).catch((error) => {reject(error);});
+  });
+}
+
+
+export function returnPendingTutors() {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('tutors/').once('value').then(function(snapshot) {
+      var tutor_list = [];
+      snapshot.forEach(function(childSnapshot) {
+        var childKey = childSnapshot.key;
+        var childData = childSnapshot.val();
+        if (childData.frozen == true) {
+          tutor_list.push({childData, childKey});
+        }
+
+      });
+      resolve(tutor_list);
+      //resolve(snapshot.val());
+    }).catch((error) => {
+      reject(error);
+    });
+  })
 }
 
 export function returnTutorData() {
     return new Promise((resolve, reject) => {
       firebase.database().ref('tutors/').once('value').then(function(snapshot) {
-        console.log("resolving from returndata: " + JSON.stringify(snapshot.val()));
         var tutor_list = [];
         snapshot.forEach(function(childSnapshot) {
           var childKey = childSnapshot.key;
@@ -59,7 +99,6 @@ export function returnStudentData() {
 
 export function returnTutor(uid) {
   console.log("uid: " + uid);
-  console.log("IN RETURN TUTOR");
   return new Promise((resolve, reject) => {
     firebase.database().ref('tutors/' + uid).once('value').then(function(snapshot) {
 
@@ -69,6 +108,18 @@ export function returnTutor(uid) {
       reject(error);
     });
   })
+}
+
+export function returnStudent(uid) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('students/' + uid).once('value').then(function(snapshot) {
+          console.log("return student snapshot: " + JSON.stringify(snapshot));
+          resolve(snapshot);
+        }
+    ).catch((error) => {
+      reject(error);
+    });
+  });
 }
 
 function signIn(email, password) {
