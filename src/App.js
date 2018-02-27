@@ -55,14 +55,7 @@ class App extends Component {
             <input type="text" className="searchTerm" placeholder="Who are you looking for?"/>
          </div>
 
-        <div className="Content">
-          <p>
-            For now, the button below approves all pending tutors.
-          </p>
-          <button className="approveAll" onClick={approveAll}>
-            Approve Pending Tutors
-          </button>
-
+        <div className="content">
 
           <h2>Pending tutors</h2>
           {this.state.arePendingTutors ? <TutorTable className="tutorTable" data={this.state.pendingTutors} pending = {true} /> : <h4>No pending tutors at this time.</h4> }

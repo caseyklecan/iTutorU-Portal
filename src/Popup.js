@@ -18,25 +18,6 @@ const backdropStyle = {
   opacity: 0.5
 };
 
-const dialogStyle = function() {
-  // we use some psuedo random coords so nested modals
-  // don't sit right on top of each other.
-  let top = 50;
-  let left = 50;
-
-  return {
-    position: 'absolute',
-    width: 400,
-    top: top + '%', left: left + '%',
-    transform: `translate(-${top}%, -${left}%)`,
-    border: '1px solid #e5e5e5',
-    backgroundColor: 'white',
-    boxShadow: '0 5px 15px rgba(0,0,0,.5)',
-    padding: 20,
-    borderRadius: 10,
-  };
-};
-
 
 class Popup extends React.Component {
   state = {
@@ -126,10 +107,10 @@ class Popup extends React.Component {
           show={true}
           onHide={this.close}
           >
-        <div style ={dialogStyle()}>
-          <button onClick={()=>this.props.call(false)}>Close</button>
-          {this.showData(this.props.type)}
+        <div className="popup">
 
+          {this.showData(this.props.type)}
+          <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
         </div>
       </Modal>
     );

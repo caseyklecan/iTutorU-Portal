@@ -19,9 +19,10 @@
   font-weight: 400;
 }
 
-.Content {
+.content {
   text-align: left;
   margin: 7.5%;
+  margin-top: 2.5%;
   font-weight: 300;
   font-size: large;
 }
@@ -84,7 +85,7 @@
   background-color: #FF0000;
   color: white;
   font-size: medium;
-  padding: 5%;
+  padding: 10px;
   border-radius: 3px;
   border-color: #FF0000;
   transition-duration: .6s;
@@ -103,7 +104,7 @@
   background-color: #007AFF;
   color: white;
   font-size: medium;
-  padding: 5%;
+  padding: 10px;
   border-radius: 3px;
   border-color: #007AFF;
   transition-duration: .6s;
@@ -136,5 +137,31 @@ table {
   margin-top: 2.5%;
   margin-bottom: 2.5%;
   width: 100%;
-  height: 20%;
+}
+
+.popup {
+  top: 50;
+  left: 50;
+  position: absolute;
+  width: 400px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #e5e5e5;
+  background-color: #F2F2F2;
+  box-shadow: 0 5px 15px rgba(0,0,0,.5);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.closeButton {
+  background-color: #007AFF;
+  color: white;
+  font-size: medium;
+  padding: 10px;
+  border-radius: 3px;
+  border-color: #007AFF;
+  transition-duration: .6s;
+  margin-top: 5%;
+  width: 100%;
 }

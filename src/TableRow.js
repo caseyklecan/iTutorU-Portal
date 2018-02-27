@@ -82,7 +82,7 @@ export class StudentTableRow extends Component {
         <td>{this.props.grade}</td>
 
         <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
-        {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Student" /> : null}
+        {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Student" className="popup"/> : null}
         </tr>
     );
   }
