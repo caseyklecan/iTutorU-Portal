@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { StudentTableRow } from './TableRow';
-import Popup from './Popup';
 import './App.css';
 
 class StudentTable extends Component {
-  constructor(props) {
-    super(props);
-
-  }
-
   renderRows() {
     var student_list = []
     var len = this.props.data.length;

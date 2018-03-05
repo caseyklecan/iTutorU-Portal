@@ -5,8 +5,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {
   BrowserRouter,
-  Route,
-  hashHistory,
+  Route
 } from 'react-router-dom';
 import ViewProfile from './ViewProfile';
 

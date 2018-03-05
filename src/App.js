@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize} from './FirebaseManager';
+import {returnPendingTutors, returnTutorData, returnStudentData, initialize} from './FirebaseManager';
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
 import './App.css';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Switch
-} from 'react-router-dom';
-import Popup from './Popup'
 
 
 class App extends Component {
@@ -23,7 +16,7 @@ class App extends Component {
     }
 
     componentWillMount() {
-      if (this.state.initialized == false) {
+      if (this.state.initialized === false) {
       initialize().then(res =>
         returnTutorData().then(res => {
           this.setState({ tutorData: res});
@@ -35,7 +28,7 @@ class App extends Component {
 
         returnPendingTutors().then(res => {
           this.setState({pendingTutors: res});
-          if (res.length == 0) {
+          if (res.length === 0) {
             this.setState({arePendingTutors : false})
           }
         })
@@ -77,12 +70,3 @@ class App extends Component {
 }
 
 export default App;
-
-function approveAll() {
-  // todo connect to backend, approve all tutors
-}
-
-function approveTutor() {
-  // todo approve the selected tutor
-
-}

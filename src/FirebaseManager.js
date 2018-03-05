@@ -49,7 +49,7 @@ export function returnPendingTutors() {
       snapshot.forEach(function(childSnapshot) {
         var childKey = childSnapshot.key;
         var childData = childSnapshot.val();
-        if (childData.frozen == true) {
+        if (childData.frozen === true) {
           tutor_list.push({childData, childKey});
         }
 

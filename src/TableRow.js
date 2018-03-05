@@ -1,9 +1,6 @@
-import React, { Component, Button } from 'react';
+import React, { Component } from 'react';
 import Popup from './Popup';
-import { Link , Route } from 'react-router-dom';
-import ViewProfile from './ViewProfile';
 import './App.css';
-import {approveTutor} from './FirebaseManager';
 
 export default class TableRow extends Component {
 
@@ -18,7 +15,7 @@ export default class TableRow extends Component {
     if (dataFromPopup === false) {
       this.setState({showPopup: false});
     }
-    if (this.state.approved == true) {
+    if (this.state.approved === true) {
       this.setState({approved: false});
     }
   }
@@ -31,7 +28,6 @@ export default class TableRow extends Component {
 
   onClickApprove() {
     this.setState({pending: false, approved: true})
-    {/*approveTutor(this.props.uid); (uncomment this later when we actually want to modify database));*/}
   }
 
 
@@ -41,7 +37,6 @@ export default class TableRow extends Component {
         <td>{this.props.name}</td>
         <td>{this.props.subjects}</td>
         <td>{this.props.email}</td>
-        {/*}<Link to={'./profile/' + this.props.uid}>View</Link>*/}
         <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
         {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Tutor" pending = {this.props.pending} /> : null}
         {this.props.pending ? <button className="approve" onClick={() => this.onClickApprove()}>Approve</button> : null }
