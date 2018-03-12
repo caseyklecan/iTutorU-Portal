@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400,700');
+@import url('https://unpkg.com/react-tabs@2/style/react-tabs.css');
 
 .App {
   text-align: center;
@@ -164,4 +165,27 @@ table {
   transition-duration: .6s;
   margin-top: 5%;
   width: 100%;
+}
+
+.login {
+  padding: 32px;
+  width: 10%;
+  text-align: left;
+  margin-right: 40%;
+  margin-left: 40%;
+}
+
+input, label {
+  margin: 8px;
+  width: 100%;
+}
+
+input[type=submit] {
+  background-color: #007AFF;
+  color: white;
+  border: 2px solid #007AFF;
+  border-radius: 5px;
+  height: 30px;
+  width: 105%;
+  font-size: .8em;
 }
