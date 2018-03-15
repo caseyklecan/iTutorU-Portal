@@ -8,6 +8,11 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 class App extends Component {
 
+  constructor(props) {
+    super(props);
+    this.onClickLogin = this.onClickLogin.bind(this);
+  }
+
   state = {
       tutorData: {},
       studentData: {},
@@ -39,8 +44,11 @@ class App extends Component {
       this.setState({initialized: true})
     }
 
-    onClickLogin() {
-      this.setState({loggedIn: true});
+    onClickLogin(email, password) {
+      if (email === 'info@itutoru.org' && password === 'password') {
+        // TODO change this to access the database for a password
+        this.setState({loggedIn: true});
+      }
     }
 
   render() {
@@ -91,12 +99,16 @@ class App extends Component {
           <div className="login">
             <form>
               <label>Email:<br />
-              <input type="text" name="email" />
+              <input type="text" name="email" id="emailInput" />
               </label><br />
               <label>Password:<br />
-              <input type="password" name="password" />
+              <input type="password" name="password" id="passInput" />
               </label> <br />
-              <input type="submit" value="Log In" onClick={this.onClickLogin.bind(this)}/>
+              <input type="submit" value="Log In" onClick={() => {
+                var email = document.getElementById("emailInput").value;
+                var pass = document.getElementById("passInput").value;
+                this.onClickLogin(email, pass);
+              }}/>
             </form>
           </div>
         </div>

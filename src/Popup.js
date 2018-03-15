@@ -60,7 +60,7 @@ class Popup extends React.Component {
         return (
           <div>
           <h2>{this.props.data.childData.name}</h2>
-          <h4>Type: {this.props.type}</h4>
+          <h4>{this.props.type}</h4>
           <h4>Subject(s): {this.props.data.childData.subjects}</h4>
           <h4>City: {this.props.data.childData.city}</h4>
           <h4>Degree: {this.props.data.childData.degree}</h4>
@@ -79,7 +79,7 @@ class Popup extends React.Component {
       return (
         <div>
         <h4>{this.props.data.studentName}</h4>
-        <h4>Type: {this.props.type}</h4>
+        <h4>{this.props.type}</h4>
         <h4>Subject(s): {this.props.data.subjects}</h4>
         <h4>City: {this.props.data.city}</h4>
         <h4>Grade: {this.props.data.grade}</h4>
