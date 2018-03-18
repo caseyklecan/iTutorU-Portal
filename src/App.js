@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {returnPendingTutors, returnTutorData, returnStudentData, initialize} from './FirebaseManager';
+import {returnPendingTutors, returnTutorData, returnStudentData, initialize, returnEmail, returnPass} from './FirebaseManager';
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
 import './App.css';
@@ -19,7 +19,9 @@ class App extends Component {
       pendingTutors: {},
       initialized: false,
       arePendingTutors: true,
-      loggedIn: false
+      loggedIn: false,
+      correctEmail: "",
+      correctPass: ""
     }
 
     componentWillMount() {
@@ -38,6 +40,14 @@ class App extends Component {
           if (res.length === 0) {
             this.setState({arePendingTutors : false})
           }
+        }),
+
+        returnEmail().then(res => {
+          this.setState({correctEmail: JSON.stringify(res)})
+        }),
+
+        returnPass().then(res => {
+          this.setState({correctPass: JSON.stringify(res)})
         })
       );
     }
@@ -45,9 +55,8 @@ class App extends Component {
     }
 
     onClickLogin(email, password) {
-      if (email === 'info@itutoru.org' && password === 'password') {
-        // TODO change this to access the database for a password
-        this.setState({loggedIn: true});
+      if (JSON.stringify(email) === this.state.correctEmail && JSON.stringify(password) === this.state.correctPass) {
+        this.setState({loggedIn: true, correctEmail: "", correctPass: ""})
       }
     }
 

@@ -122,6 +122,28 @@ export function returnStudent(uid) {
   });
 }
 
+export function returnEmail() {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('admin/email').once('value').then(function(snapshot) {
+          resolve(snapshot);
+        }
+    ).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
+export function returnPass() {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('admin/password').once('value').then(function(snapshot) {
+          resolve(snapshot);
+        }
+    ).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
 function signIn(email, password) {
     return new Promise((resolve, reject) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
@@ -145,4 +167,9 @@ export function unFreezeStudent(user) {
   firebase.database().ref('students/' + user).update({
         frozen: false,
   });
+}
+
+export function checkLoginCredentials(email, password) {
+
+
 }
