@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {returnPendingTutors, returnTutorData, returnStudentData, initialize} from './FirebaseManager';
+import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize, returnPairData} from './FirebaseManager';
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
+import PairsTable from './PairsTable';
 import './App.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
@@ -18,7 +19,8 @@ class App extends Component {
       studentData: {},
       pendingTutors: {},
       initialized: false,
-      arePendingTutors: true
+      arePendingTutors: true,
+      pairData: []
     }
 
     componentWillMount() {
@@ -39,6 +41,17 @@ class App extends Component {
           }
         })
       );
+
+      returnPairData().then(res => {
+          //result is student->tutor pairs
+          //console.log("res: " + JSON.stringify(res));
+          console.log(res);
+          console.log('HELLO');
+          this.setState({ pairData: res });
+          //this.state.pairData = res;
+          //this.setState(this.state);
+          console.log("set the state for pairs");
+        })
     }
       this.setState({initialized: true})
     }
@@ -61,6 +74,7 @@ class App extends Component {
                 <Tab>Pending Tutors</Tab>
                 <Tab>Active Tutors</Tab>
                 <Tab>Students</Tab>
+                <Tab>Tutor-Student Pairs</Tab>
               </TabList>
 
               <TabPanel>
@@ -76,6 +90,12 @@ class App extends Component {
               <TabPanel>
                 <h2>All Students</h2>
                 <StudentTable className="tutorTable" data = {this.state.studentData} />
+              </TabPanel>
+
+              <TabPanel>
+                  <h2>Tutor-Student Pairs</h2>
+                  <PairsTable className="tutorTable" data = {this.state.pairData} />
+
               </TabPanel>
             </Tabs>
           </div>

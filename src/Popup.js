@@ -21,6 +21,7 @@ class Popup extends React.Component {
   state = {
     showModal: true,
     students: [],
+    isEditing: false,
   }
 
   onClickClose() {
@@ -41,10 +42,27 @@ class Popup extends React.Component {
     );
   }
 
+  editInfo() {
+    /* could only ever go in here if it's a student or approved tutor */
+    this.setState({isEditing: true});
+  }
+
+  showEditable(type) {
+    /* show all the same info except in editable text fields */
+    /* have done button */
+    if (type === "Tutor") {
+        /* editable tutor information */
+    }
+    else {
+        /* editable student information */
+    }
+  }
+
   showData(type) {
     if (type === "Tutor") {
 
       if (this.props.pending === true) {
+        /* PENDING TUTOR */
         return (
           <div>
           <h2>{this.props.data.childData.name}</h2>
@@ -56,7 +74,7 @@ class Popup extends React.Component {
       }
       else {
 
-
+          /* TUTOR INFO POPUP */
         return (
           <div>
           <h2>{this.props.data.childData.name}</h2>
@@ -76,6 +94,7 @@ class Popup extends React.Component {
 
     }
     else if (type === "Student"){
+      /* STUDENT POPUP */
       return (
         <div>
         <h4>{this.props.data.studentName}</h4>
@@ -107,7 +126,8 @@ class Popup extends React.Component {
           >
         <div className="popup">
 
-          {this.showData(this.props.type)}
+          {!this.state.isEditing ? this.showData(this.props.type) : this.showEditable(this.props.type)}
+          {!this.props.pending ? <button onClick = {()=>this.editInfo()} className="closeButton">Edit</button> : null}
           <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
         </div>
       </Modal>

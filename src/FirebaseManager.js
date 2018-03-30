@@ -97,6 +97,31 @@ export function returnStudentData() {
   })
 }
 
+export function returnStudentAndKey(uid) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('students/' + uid).once('value').then(function(snapshot) {
+          console.log("return student snapshot: " + JSON.stringify(snapshot));
+          resolve({student: snapshot.val(), key: uid});
+        }
+    ).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
+export function returnTutorAndKey(uid) {
+  console.log("uid: " + uid);
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('tutors/' + uid).once('value').then(function(snapshot) {
+
+          resolve({tutor: snapshot.val(), key: uid});
+        }
+    ).catch((error) => {
+      reject(error);
+    });
+  })
+}
+
 export function returnTutor(uid) {
   console.log("uid: " + uid);
   return new Promise((resolve, reject) => {
@@ -171,5 +196,95 @@ export function unFreezeStudent(user) {
 
 export function checkLoginCredentials(email, password) {
 
+
+}
+
+export function returnPairData() {
+  //returns a JSON object of {{name: fjlsdjf age: 5}, {name: tutor}}
+  return new Promise((resolve, reject) => {
+    var toReturn =
+      []
+
+      firebase.database().ref('students/').once('value').then(function(snapshot) {
+        var arrayOfStudents = snapshot.val();
+        console.log("STUDENTS ARRAY");
+        console.log(arrayOfStudents);
+        for (var key in arrayOfStudents) {
+          console.log(key);
+          returnStudentAndKey(key).then(function(res) {
+            var tutorID = res.student.tutor;
+            var studentID = res.key;
+            var studentInfo = res.student;
+            returnTutorAndKey(tutorID).then(function(res2){
+              var tutorID = res2.key;
+              var tutorInfo = res2.tutor;
+              toReturn.push({ tutor: tutorInfo, student: studentInfo, studentID: studentID, tutorID: tutorID });
+              if (toReturn.length === Object.keys(arrayOfStudents).length) {
+                resolve(toReturn);
+              }
+            });
+          });
+        }
+      });
+
+
+
+
+  });
+    /*
+    var student = {};
+    var tutor = {};
+    var pair_list = [];
+    firebase.database().ref('students/').once('value').then(function(snapshot) {
+      var pair_list = [];
+      console.log("IN PAIR DATA");
+      snapshot.forEach(function(childSnapshot) {
+        var childKey = childSnapshot.key;
+        console.log("child key: " + childKey);
+        var childData = childSnapshot.val().tutor;
+        console.log("student: " + childKey + ", tutor: " + childData);
+        var student = {};
+        var tutor = {};
+        returnStudent(childKey).then(res => {
+          student = res;
+        }).then(function(student) {
+          returnTutor(childData).then(res => {
+            tutor = res;
+            pair_list.push({student: student, tutor: tutor});
+          });
+        })
+
+      }).then(resolve(pair_list));
+      //resolve(pair_list);
+      //resolve(snapshot.val());
+    }).catch((error) => {
+      reject(error);
+    });
+  })
+  */
+}
+
+export function getMessage(messageID) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('messages/' + messageID).once('value').then(function(snapshot) {
+      console.log(snapshot.val());
+        resolve({from: snapshot.val().from, text: snapshot.val().message, time: snapshot.val().timestamp});
+    }).catch((error) => {reject(error);});
+
+  });
+}
+
+export function getConversation(studentID, tutorID) {
+  var convoID = '';
+  var arr = [studentID, tutorID];
+  arr.sort();
+  convoID = '' + arr[0] + arr[1];
+  console.log(convoID);
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('conversations/' + convoID).once('value').then(function(snapshot) {
+        resolve(snapshot.val());
+    }).catch((error) => {reject(error);});
+
+  });
 
 }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Popup from './Popup';
 import './App.css';
+import MessagesPopup from './MessagesPopup';
+import { getConversation } from './FirebaseManager';
 
 export default class TableRow extends Component {
 
@@ -79,6 +81,45 @@ export class StudentTableRow extends Component {
         <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
         {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Student" className="popup"/> : null}
         </tr>
+    );
+  }
+}
+
+export class PairsTableRow extends Component {
+
+  state = {
+    buttonText: "Messages",
+    messagesExist: false,
+  }
+
+  componentWillMount() {
+    console.log("CMPNNENT WILL MOUNT");
+    console.log(this.props);
+
+    getConversation(this.props.studentID, this.props.tutorID).then(res => {
+      console.log("got conversation");
+      console.log(res);
+      if (res != null) {
+        this.setState({messagesExist: true});
+      }
+    });
+  }
+
+
+  onClickMessages() {
+      this.setState({ showPopup: true})
+  }
+
+
+  render() {
+    return (
+      <tr>
+        <td>{this.props.studentInfo.studentName}</td>
+        <td>{this.props.tutorInfo.name}</td>
+        {this.state.messagesExist ? <button className="view" onClick={()=>this.onClickMessages()}>{this.state.buttonText}</button> : <td>No Messages</td>}
+        /* once they click messages, show a messageView instead of a messagePopup, and pass props back */
+        {this.state.showPopup ? <MessagesPopup data={this.props} call={this.closePopup}/> : null}
+      </tr>
     );
   }
 }
