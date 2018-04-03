@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize, returnPairData} from './FirebaseManager';
+import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize, returnPairData, returnEmail, returnPass } from './FirebaseManager';
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
 import PairsTable from './PairsTable';
@@ -9,10 +9,10 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 class App extends Component {
 
-  // constructor(props) {
-  //   super(props);
-  //   // this.onClickLogin = this.onClickLogin.bind(this);
-  // }
+  constructor(props) {
+    super(props);
+    this.onClickLogin = this.onClickLogin.bind(this);
+  }
 
   state = {
       tutorData: {},
@@ -20,7 +20,9 @@ class App extends Component {
       pendingTutors: {},
       initialized: false,
       arePendingTutors: true,
-      pairData: []
+      pairData: [],
+      correctEmail: "",
+      correctPass: ""
     }
 
     componentWillMount() {
@@ -40,6 +42,14 @@ class App extends Component {
           if (res.length === 0) {
             this.setState({arePendingTutors : false})
           }
+        }),
+
+        returnEmail().then(res => {
+          this.setState({correctEmail: JSON.stringify(res)})
+        }),
+
+        returnPass().then(res => {
+          this.setState({correctPass: JSON.stringify(res)})
         })
       );
 
@@ -57,8 +67,14 @@ class App extends Component {
       this.setState({initialized: true})
     }
 
+    onClickLogin(email, password) {
+      if (JSON.stringify(email) === this.state.correctEmail && JSON.stringify(password) === this.state.correctPass) {
+        this.setState({loggedIn: true, correctEmail: "", correctPass: ""})
+      }
+    }
+
   render() {
-    // if (this.state.loggedIn) {
+    if (this.state.loggedIn) {
       return (
         <div className="App">
           <header className="App-header">
@@ -103,30 +119,30 @@ class App extends Component {
 
         </div>
       );
-    // } else {
-    //   return (
-    //     <div className="App">
-    //       <header className="App-header">
-    //         <h1 className="App-title">iTutorU Admin</h1>
-    //       </header>
-    //       <div className="login">
-    //         <form>
-    //           <label>Email:<br />
-    //           <input type="text" name="email" id="emailInput" />
-    //           </label><br />
-    //           <label>Password:<br />
-    //           <input type="password" name="password" id="passInput" />
-    //           </label> <br />
-    //           <input type="submit" value="Log In" onClick={() => {
-    //             var email = document.getElementById("emailInput").value;
-    //             var pass = document.getElementById("passInput").value;
-    //             this.onClickLogin(email, pass);
-    //           }}/>
-    //         </form>
-    //       </div>
-    //     </div>
-    //   )
-    // }
+    } else {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <h1 className="App-title">iTutorU Admin</h1>
+          </header>
+          <div className="login">
+            <form>
+              <label>Email:<br />
+              <input type="text" name="email" id="emailInput" />
+              </label><br />
+              <label>Password:<br />
+              <input type="password" name="password" id="passInput" />
+              </label> <br />
+              <input type="submit" value="Log In" onClick={() => {
+                var email = document.getElementById("emailInput").value;
+                var pass = document.getElementById("passInput").value;
+                this.onClickLogin(email, pass);
+              }}/>
+            </form>
+          </div>
+        </div>
+      )
+    }
   }
 }
 

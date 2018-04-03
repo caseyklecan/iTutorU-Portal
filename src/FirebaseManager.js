@@ -307,3 +307,26 @@ export function getConversation(studentID, tutorID) {
   });
 
 }
+
+// todo get rid of these & use auth to login
+export function returnEmail() {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('admin/email').once('value').then(function(snapshot) {
+          resolve(snapshot);
+        }
+    ).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
+export function returnPass() {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('admin/password').once('value').then(function(snapshot) {
+          resolve(snapshot);
+        }
+    ).catch((error) => {
+      reject(error);
+    });
+  });
+}
