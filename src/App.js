@@ -32,6 +32,7 @@ class App extends Component {
 
         returnStudentData().then(res => {
           this.setState({ studentData: res});
+          console.log(res); /* has childData and childKey */
         }),
 
         returnPendingTutors().then(res => {

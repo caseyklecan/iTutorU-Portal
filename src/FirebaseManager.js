@@ -87,7 +87,7 @@ export function returnStudentData() {
       snapshot.forEach(function(childSnapshot) {
         var childKey = childSnapshot.key;
         var childData = childSnapshot.val();
-        student_list.push(childData);
+        student_list.push({childData, childKey});
       });
       resolve(student_list);
       //resolve(snapshot.val());
@@ -262,6 +262,25 @@ export function returnPairData() {
     });
   })
   */
+}
+
+export function deleteFromFirebase(type, ID) {
+  var ref = firebase.database().ref(type + '/' + ID);
+  ref.remove();
+}
+
+export function updateStudent(updatedInfo) {
+  firebase.database().ref('students/' + updatedInfo.ID).update({
+    studentName: updatedInfo.name,
+    grade: updatedInfo.grade,
+    city: updatedInfo.city,
+  });
+}
+
+export function updateTutor(updatedInfo) {
+  firebase.database().ref('tutors/').update({
+    [updatedInfo.ID] : updatedInfo,
+  });
 }
 
 export function getMessage(messageID) {

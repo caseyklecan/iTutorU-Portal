@@ -145,6 +145,7 @@ table {
   left: 50;
   position: absolute;
   width: 400px;
+  /* height: 80%; */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -155,6 +156,11 @@ table {
   border-radius: 10px;
 }
 
+.popup-data {
+  height: 90%;
+  overflow: scroll;
+}
+
 .closeButton {
   background-color: #007AFF;
   color: white;
@@ -163,7 +169,7 @@ table {
   border-radius: 3px;
   border-color: #007AFF;
   transition-duration: .6s;
-  margin-top: 5%;
+  margin-top: 2%;
   width: 100%;
 }
 
@@ -188,4 +194,50 @@ input[type=submit] {
   height: 30px;
   width: 105%;
   font-size: .8em;
+}
+
+.messageLeft {
+  /* margin: 5px; */
+  margin-right: 100px;
+}
+.messageRight {
+  /* margin: 5px; */
+  margin-left: 100px;
+}
+
+.messageBodyLeft {
+  background-color: lightgray;
+  border-radius: 10px;
+  padding: 5px;
+  /* padding: 0px 5px; */
+}
+
+.messageBodyRight {
+  background-color: skyblue;
+  border-radius: 10px;
+  padding: 5px;
+  /* padding: 0px 5px; */
+}
+
+.messageBodyLeft p {
+  padding: 0px 5px;
+  margin: 0px;
+}
+
+.messageBodyRight p {
+  padding: 0px 5px;
+  margin: 0px;
+}
+
+.time {
+  font-style: italic;
+  color: gray;
+  font-size: 10px;
+}
+
+.sender {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  font-size: 13px;
 }

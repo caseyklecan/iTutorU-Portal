@@ -15,9 +15,9 @@ class StudentTable extends Component {
     return(
       student_list.map((item) => {
         return <StudentTableRow
-          studentName={item.studentName}
-          subjects={item.subject}
-          grade={item.grade}
+          studentName={item.childData.studentName}
+          subjects={item.childData.subject}
+          grade={item.childData.grade}
           allData={item}
         />
       }
@@ -27,8 +27,6 @@ class StudentTable extends Component {
 
   render() {
     return (
-      // const data = this.props();
-      // const { data } = this.props;
       <table>
         <tbody>
         <tr>

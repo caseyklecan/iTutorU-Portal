@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-overlays';
 import { getConversation, getMessage, returnStudent, returnTutor } from './FirebaseManager';
+import './App.css';
 
 
 
@@ -9,7 +10,10 @@ let rand = ()=> (Math.floor(Math.random() * 20) - 10);
 const modalStyle = {
   position: 'fixed',
   zIndex: 1040,
-  top: 0, bottom: 0, left: 0, right: 0
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
 };
 
 const backdropStyle = {
@@ -37,7 +41,9 @@ class MessagesPopup extends React.Component {
 
   componentWillMount() {
     var messages = [];
-    console.log("STATE: " + JSON.stringify(this.props));
+    console.log("PROPS");
+    console.log(this.props);
+    //console.log("STATE: " + JSON.stringify(this.props));
     getConversation(this.props.data.studentID, this.props.data.tutorID).then(res => {
       console.log("got conversation");
       messages = res;
@@ -47,6 +53,19 @@ class MessagesPopup extends React.Component {
         getMessage(messages[i]).then(res => {
           this.state.messageData.push(res);
           this.setState(this.state);
+
+          if (this.state.messageData.length == 1) {
+            //console.log("MESSAGES LENGTH: " + this.state.messages.length);
+            var firstName = '';
+            var secondName = '';
+
+            firstName=this.state.studentName;
+            secondName=this.state.tutorName;
+
+            this.setState({ firstName });
+            this.setState({ secondName });
+          }
+
         })
       }
 
@@ -55,35 +74,10 @@ class MessagesPopup extends React.Component {
     });
 
 
+    this.setState({ studentName: this.props.data.studentInfo.studentName });
+    this.setState({ tutorName: this.props.data.tutorInfo.name});
 
-    returnStudent(this.props.data.studentID).then(res => {
-      this.setState({studentName: res.studentName});
-    });
 
-    returnTutor(this.props.data.tutorID).then(res => {
-      this.setState({tutorName: res.name});
-    });
-
-    if (this.state.messageData.length > 0) {
-      console.log("MESSAGES LENGTH: " + this.state.messages.length);
-      var firstName = '';
-      var secondName = '';
-      var isFirst = true;
-      var firstID = this.state.messageData[0].from;
-      if (firstID === this.state.studentID) {
-        firstName = this.state.studentName;
-        secondName = this.state.tutorName;
-      }
-      else {
-        firstName = this.state.tutorName;
-        secondName = this.state.studentName;
-      }
-
-      console.log("first name: " + firstName);
-
-      this.setState({firstName: firstName});
-      this.setState({secondName: secondName});
-    }
 
 
   }
@@ -97,30 +91,32 @@ class MessagesPopup extends React.Component {
 
       return (this.state.messageData.map((item) => {
         console.log(item);
-        var firstID = this.state.messageData[0].from;
-        if (item.from === firstID) {
+        //var firstID = this.state.messageData[0].from;
+        var leftID = this.props.data.studentID;
+        if (item.from === leftID) {
           return (
-            <div>
-              <h5>From: {this.state.firstName}</h5>
-              <h5>Message: {item.text}</h5>
-              <h5>Time: {item.time}</h5>
+            <div className="messageLeft">
+              <p className="sender">{this.state.firstName}</p>
+              <div className="messageBodyLeft">
+                <p>{item.text}</p>
+                <p className="time">{item.time}</p>
+              </div>
             </div>
           );
         }
         else {
           return (
-            <div>
-              <h5>From: {this.state.secondName}</h5>
-              <h5>Message: {item.text}</h5>
-              <h5>Time: {item.time}</h5>
+            <div className="messageRight">
+              <p className="sender">{this.state.secondName}</p>
+              <div className="messageBodyRight">
+                <p>{item.text}</p>
+                <p className="time">{item.time}</p>
+              </div>
             </div>
           );
         }
       })
     );
-
-
-
 
     }
 
@@ -140,10 +136,14 @@ class MessagesPopup extends React.Component {
           show={true}
           onHide={this.close}
           >
-        <div className="popup">
-
-          {this.showData()}
-          <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
+        <div className="popup" style={{ height: '80%'}}>
+          <div className="popup-data">
+            {this.showData()}
+          </div>
+          <button onClick={()=>{
+            this.props.call(false);
+            console.log("registered click");
+          }} className="closeButton">Close</button>
         </div>
       </Modal>
     );

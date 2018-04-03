@@ -90,6 +90,7 @@ export class PairsTableRow extends Component {
   state = {
     buttonText: "Messages",
     messagesExist: false,
+    showPopup: false,
   }
 
   componentWillMount() {
@@ -110,6 +111,12 @@ export class PairsTableRow extends Component {
       this.setState({ showPopup: true})
   }
 
+  closePopup = (dataFromPopup) => {
+    if (dataFromPopup === false) {
+      this.setState({showPopup: false});
+    }
+  }
+
 
   render() {
     return (
@@ -117,7 +124,6 @@ export class PairsTableRow extends Component {
         <td>{this.props.studentInfo.studentName}</td>
         <td>{this.props.tutorInfo.name}</td>
         {this.state.messagesExist ? <button className="view" onClick={()=>this.onClickMessages()}>{this.state.buttonText}</button> : <td>No Messages</td>}
-        /* once they click messages, show a messageView instead of a messagePopup, and pass props back */
         {this.state.showPopup ? <MessagesPopup data={this.props} call={this.closePopup}/> : null}
       </tr>
     );
