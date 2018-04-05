@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Popup from './Popup';
 import './App.css';
 import MessagesPopup from './MessagesPopup';
-import { getConversation } from './FirebaseManager';
+import { getConversation, registerStudent } from './FirebaseManager';
 
 export default class TableRow extends Component {
 
@@ -52,7 +52,8 @@ export default class TableRow extends Component {
 export class StudentTableRow extends Component {
   state = {
     showPopup: false,
-    buttonText: "View"
+    buttonText: "View",
+    registered: false,
   }
 
   onClickView() {
@@ -65,6 +66,11 @@ export class StudentTableRow extends Component {
     }
   }
 
+  onClickRegister() {
+    registerStudent(this.props.studentID);
+    this.setState({registered: true});
+  }
+
   closePopup = (dataFromPopup) => {
     if (dataFromPopup === false) {
       this.setState({showPopup: false});
@@ -72,16 +78,40 @@ export class StudentTableRow extends Component {
   }
 
   render() {
-    return (
-      <tr>
-        <td>{this.props.studentName}</td>
-        <td>{this.props.subjects}</td>
-        <td>{this.props.grade}</td>
+    if (this.props.registering) {
+      if (!this.state.registered) {
+        return (
+          <tr>
+            <td>{this.props.parentName}</td>
+            <td>{this.props.studentName}</td>
+            <td>{this.props.address}</td>
+            <td>{this.props.phone}</td>
+            <button className="view" onClick={()=>this.onClickRegister()}>Remove</button>
+          </tr>
+        );
+      }
+      else {
+        return (
+          <tr>
+          </tr>
 
-        <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
-        {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Student" className="popup"/> : null}
-        </tr>
-    );
+        );
+
+      }
+    }
+    else {
+      return (
+        <tr>
+          <td>{this.props.studentName}</td>
+          <td>{this.props.subjects}</td>
+          <td>{this.props.grade}</td>
+
+          <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
+          {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Student" className="popup"/> : null}
+          </tr>
+      );
+    }
+
   }
 }
 

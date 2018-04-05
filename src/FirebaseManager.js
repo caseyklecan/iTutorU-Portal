@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-
+/*
 const config = {
     apiKey: "AIzaSyBsjlF4FNxju6ise_-PRyyD2ZhPVwyoev4",
     authDomain: "itutoru-ef7e2.firebaseapp.com",
@@ -8,6 +8,16 @@ const config = {
     storageBucket: "itutoru-ef7e2.appspot.com",
     messagingSenderId: "115499384435"
 };
+*/
+
+const config = {
+  apiKey: "AIzaSyDIEOu99SaPq8TSdT_ep2EqrzhaDUFJ36Y",
+  authDomain: "itutoru-megan-refactor.firebaseapp.com",
+  databaseURL: "https://itutoru-megan-refactor.firebaseio.com",
+  projectId: "itutoru-megan-refactor",
+  storageBucket: "itutoru-megan-refactor.appspot.com",
+  messagingSenderId: "842705651129"
+}
 
 export function initialize() {
     firebase.initializeApp(config);
@@ -59,6 +69,61 @@ export function returnPendingTutors() {
     }).catch((error) => {
       reject(error);
     });
+  })
+}
+
+export function returnUnregisteredStudents() {
+  var info_list = [];
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('parents/').once('value').then(function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+        var parentKey = childSnapshot.key;
+        getStudentsOfParent(parentKey).then(function(res) {
+          //console.log("GOT STUDENTS OF PARENT " + parentKey);
+          //console.log(res);
+          //res = array of STUDENTS
+          if (res != null) {
+            res.forEach(function(child) {
+              //console.log("CHILD: ");
+              //console.log(child);
+              returnStudent(child).then(function(studentInfo) {
+                //console.log(studentInfo.val());
+                if (!studentInfo.val().registered) {
+                  //console.log(childSnapshot.val());
+                  var info = {studentID: child, parentName: childSnapshot.val().parentName, studentName: studentInfo.val().studentName, phone: childSnapshot.val().phoneNumber, address: studentInfo.val().address}
+                  //console.log("info:");
+                  //console.log(info);
+                  info_list.push(info);
+                }
+              })
+            });
+          }
+
+
+        })
+      });
+      resolve(info_list);
+    }).catch((error) => {
+      reject(error);
+    })
+  })
+  //go through all parents
+  //look at children of all parents
+  //if registered = false, return them
+}
+
+export function registerStudent(studentID) {
+  console.log("studentID: " + studentID);
+  firebase.database().ref('students/' + studentID).update({
+        registered: true,
+  });
+}
+
+export function getStudentsOfParent(parentID) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('parents/' + parentID + "/students").once('value').then(function(snapshot) {
+      resolve(snapshot.val());
+    })
   })
 }
 
@@ -231,37 +296,6 @@ export function returnPairData() {
 
 
   });
-    /*
-    var student = {};
-    var tutor = {};
-    var pair_list = [];
-    firebase.database().ref('students/').once('value').then(function(snapshot) {
-      var pair_list = [];
-      console.log("IN PAIR DATA");
-      snapshot.forEach(function(childSnapshot) {
-        var childKey = childSnapshot.key;
-        console.log("child key: " + childKey);
-        var childData = childSnapshot.val().tutor;
-        console.log("student: " + childKey + ", tutor: " + childData);
-        var student = {};
-        var tutor = {};
-        returnStudent(childKey).then(res => {
-          student = res;
-        }).then(function(student) {
-          returnTutor(childData).then(res => {
-            tutor = res;
-            pair_list.push({student: student, tutor: tutor});
-          });
-        })
-
-      }).then(resolve(pair_list));
-      //resolve(pair_list);
-      //resolve(snapshot.val());
-    }).catch((error) => {
-      reject(error);
-    });
-  })
-  */
 }
 
 export function deleteFromFirebase(type, ID) {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize, returnPairData, returnEmail, returnPass } from './FirebaseManager';
+import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize, returnPairData, returnEmail, returnPass, returnUnregisteredStudents } from './FirebaseManager';
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
 import PairsTable from './PairsTable';
@@ -22,7 +22,9 @@ class App extends Component {
       arePendingTutors: true,
       pairData: [],
       correctEmail: "",
-      correctPass: ""
+      correctPass: "",
+      areNewStudents: true,
+      unregisteredStudents: {},
     }
 
     componentWillMount() {
@@ -43,13 +45,20 @@ class App extends Component {
             this.setState({arePendingTutors : false})
           }
         }),
-
+/*
         returnEmail().then(res => {
           this.setState({correctEmail: JSON.stringify(res)})
         }),
 
         returnPass().then(res => {
           this.setState({correctPass: JSON.stringify(res)})
+        }),
+        */
+
+        returnUnregisteredStudents().then(res => {
+          console.log("FINISHED GETTING STUDENTS");
+          console.log(res);
+          this.setState({unregisteredStudents: res});
         })
       );
 
@@ -68,9 +77,12 @@ class App extends Component {
     }
 
     onClickLogin(email, password) {
+      /*
       if (JSON.stringify(email) === this.state.correctEmail && JSON.stringify(password) === this.state.correctPass) {
         this.setState({loggedIn: true, correctEmail: "", correctPass: ""})
       }
+      */
+      this.setState({loggedIn: true});
     }
 
   render() {
@@ -84,6 +96,14 @@ class App extends Component {
           {/*<div className="search">
               <input type="text" className="searchTerm" placeholder="Who are you looking for?"/>
            </div>*/}
+
+           {this.state.areNewStudents ?
+            <div className="content">
+              <h1><center>New Students</center></h1>
+              <StudentTable className="tutorTable" data = {this.state.unregisteredStudents} registering = {true} />
+            </div>
+            : null
+          }
 
           <div className="content">
             <Tabs>
@@ -126,7 +146,7 @@ class App extends Component {
             <h1 className="App-title">iTutorU Admin</h1>
           </header>
           <div className="login">
-            <form>
+            <form method="POST">
               <label>Email:<br />
               <input type="text" name="email" id="emailInput" />
               </label><br />
