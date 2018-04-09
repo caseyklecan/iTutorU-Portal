@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize, returnPairData, returnEmail, returnPass, returnUnregisteredStudents } from './FirebaseManager';
+import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize, returnPairData, returnEmail, returnPass, returnUnregisteredStudents, returnSubjects } from './FirebaseManager';
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
 import PairsTable from './PairsTable';
+import SettingsPopup from './SettingsPopup';
 import './App.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
@@ -25,6 +26,8 @@ class App extends Component {
       correctPass: "",
       areNewStudents: true,
       unregisteredStudents: {},
+      subjects: [],
+      showSettings: false,
     }
 
     componentWillMount() {
@@ -54,6 +57,10 @@ class App extends Component {
           this.setState({correctPass: JSON.stringify(res)})
         }),
         */
+
+        returnSubjects().then(res => {
+          this.setState({subjects: res});
+        }),
 
         returnUnregisteredStudents().then(res => {
           console.log("FINISHED GETTING STUDENTS");
@@ -85,25 +92,42 @@ class App extends Component {
       this.setState({loggedIn: true});
     }
 
+    showSettings() {
+      this.setState({showSettings: true})
+    }
+
+    closePopup = (dataFromPopup) => {
+      if (dataFromPopup === false) {
+        this.setState({showSettings: false});
+      }
+    }
+
   render() {
     if (this.state.loggedIn) {
       return (
         <div className="App">
           <header className="App-header">
             <h1 className="App-title">iTutorU Admin</h1>
+            <button className="settings" onClick={() => this.showSettings()} className="approve">Settings</button>
           </header>
 
           {/*<div className="search">
               <input type="text" className="searchTerm" placeholder="Who are you looking for?"/>
            </div>*/}
 
+           {this.state.showSettings ?
+             <SettingsPopup subjects={this.state.subjects} call={this.closePopup} />
+             : null
+           }
+
            {this.state.areNewStudents ?
             <div className="content">
               <h1><center>New Students</center></h1>
-              <StudentTable className="tutorTable" data = {this.state.unregisteredStudents} registering = {true} />
+              <StudentTable className="tutorTable" data = {this.state.unregisteredStudents} subjects = {this.state.subjects} registering = {true} />
             </div>
             : null
           }
+
 
           <div className="content">
             <Tabs>
@@ -116,17 +140,17 @@ class App extends Component {
 
               <TabPanel>
                 <h2>Pending tutors</h2>
-                {this.state.arePendingTutors ? <TutorTable className="tutorTable" data={this.state.pendingTutors} pending = {true} /> : <h4>No pending tutors at this time.</h4> }
+                {this.state.arePendingTutors ? <TutorTable className="tutorTable" data={this.state.pendingTutors} subjects = {this.state.subjects} pending = {true} /> : <h4>No pending tutors at this time.</h4> }
               </TabPanel>
 
               <TabPanel>
                 <h2>Active Tutors</h2>
-                <TutorTable className="tutorTable" data={this.state.tutorData} pending = {false} />
+                <TutorTable className="tutorTable" data={this.state.tutorData} subjects = {this.state.subjects}pending = {false} />
               </TabPanel>
 
               <TabPanel>
                 <h2>All Students</h2>
-                <StudentTable className="tutorTable" data = {this.state.studentData} />
+                <StudentTable className="tutorTable" data = {this.state.studentData} subjects = {this.state.subjects} />
               </TabPanel>
 
               <TabPanel>

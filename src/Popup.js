@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal } from 'react-overlays';
-import {getStudentsOfTutor, updateTutor, updateStudent, deleteFromFirebase} from './FirebaseManager';
-
+import {getStudentsOfTutor, updateTutor, updateStudent, deleteFromFirebase, returnSubjects, updateSubjects} from './FirebaseManager';
 
 const modalStyle = {
   position: 'fixed',
@@ -26,6 +25,8 @@ class Popup extends React.Component {
     updatedInfoStudent: {ID: '', name: '', city: '', subject: '', grade: ''},
     editText: "Edit",
     showDeleteButton: false,
+    subjects: [],
+    checkedSubjects: [],
   }
 
   onClickClose() {
@@ -38,7 +39,18 @@ class Popup extends React.Component {
     getStudentsOfTutor(this.props.data.childKey).then(res => {
       this.setState({ students: res})
     });
-  }
+   }
+
+   console.log(this.props.type);
+   if (this.props.type === 'NewStudent') {
+     //load subjects
+     console.log("loading subjects");
+     returnSubjects().then(res => {
+       this.state.subjects = res;
+       this.setState(this.state);
+     });
+
+   }
   }
 
   showStudents() {
@@ -132,12 +144,15 @@ class Popup extends React.Component {
   }
 
   deleteUser() {
+    console.log("deleting user");
     if (this.props.type === "Tutor") {
       deleteFromFirebase(this.props.type, this.state.updatedInfoTutor.ID);
     }
     else {
       deleteFromFirebase(this.props.type, this.state.updatedInfoStudent.ID);
     }
+
+    this.props.call(false);
   }
 
 
@@ -167,9 +182,11 @@ class Popup extends React.Component {
               <input type="text" value={this.state.updatedInfoTutor.phone} placeholder={this.props.data.childData.phone} onChange={(event) => this.handleChangeTutorPhone(event)} />
             </label>
           </form>
+
         );
     }
     else {
+      console.log(this.props.allSubjects);
         /* editable student information */
         return (
           <form>
@@ -249,8 +266,46 @@ class Popup extends React.Component {
     }
   }
 
-  render() {
+  handleCheck(event, sub) {
+    console.log("checked " + sub);
+    var index = this.state.checkedSubjects.indexOf(sub);
+    if (index === -1) {
+      this.state.checkedSubjects.push(sub);
+    }
+    else {
+      this.state.checkedSubjects.splice(index, 1);
+    }
+    this.setState(this.state);
+    console.log(this.state.checkedSubjects);
+  }
+
+  showSubjects() {
     return (
+      <form>
+      {this.props.allSubjects.map((sub) => {
+        return (
+          <div className="checkboxDiv">
+            <input className="checkbox" type="checkbox" name="checkbox" value={sub} onChange={(event) => this.handleCheck(event, sub)} />
+            <label className="checkboxLabel">
+              {sub}
+            </label>
+          </div>
+        );
+
+      })}
+      </form>
+    );
+
+  }
+
+  saveSubjects() {
+
+    updateSubjects(this.props.id, this.state.checkedSubjects);
+  }
+
+  render() {
+    if (this.props.type === "NewStudent") {
+      return (
         <Modal
           aria-labelledby='modal-label'
           style={modalStyle}
@@ -259,14 +314,38 @@ class Popup extends React.Component {
           onHide={this.close}
           >
         <div className="popup">
+          {/* show description of subjects */}
+          <h3>{`Parent wrote: \"${this.props.subjects}\"`}</h3>
+          <h4>Grade: {this.props.grade}</h4>
+          <h4><center>Select matching subjects below:</center></h4>
 
-          {!this.state.isEditing ? this.showData(this.props.type) : this.showEditable(this.props.type)}
-          {this.state.showDeleteButton ? <button onClick={()=>this.deleteUser()} className="closeButton">Delete User</button> : null}
-          {!this.props.pending ? <button onClick = {()=>this.editInfo()} className="closeButton">{this.state.editText}</button> : null}
-          <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
+          {/* show checkboxes of subjects */}
+          {this.showSubjects()}
+          <button onClick={()=>this.saveSubjects()} className="closeButton">Close</button>
         </div>
       </Modal>
-    );
+      );
+
+    }
+    else {
+      return (
+          <Modal
+            aria-labelledby='modal-label'
+            style={modalStyle}
+            backdropStyle={backdropStyle}
+            show={true}
+            onHide={this.close}
+            >
+          <div className="popup">
+            {!this.state.isEditing ? this.showData(this.props.type) : this.showEditable(this.props.type)}
+            {this.state.showDeleteButton ? <button onClick={()=>this.deleteUser()} className="closeButton">Delete User</button> : null}
+            {!this.props.pending ? <button onClick = {()=>this.editInfo()} className="closeButton">{this.state.editText}</button> : null}
+            <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
+          </div>
+        </Modal>
+      );
+    }
+
   }
 }
 

@@ -13,6 +13,7 @@
   padding: 20px;
   color: white;
   margin-bottom: 0;
+  flex-direction: row;
 }
 
 .App-title {
@@ -161,6 +162,18 @@ table {
   overflow: scroll;
 }
 
+.deleteButton {
+  background-color: #FF0000;
+  color: white;
+  font-size: medium;
+  padding: 10px;
+  border-radius: 3px;
+  border-color: #FF0000;
+  transition-duration: .6s;
+  margin-top: 2%;
+  width: 100%;
+}
+
 .closeButton {
   background-color: #007AFF;
   color: white;
@@ -240,4 +253,21 @@ input[type=submit] {
   padding: 0;
   font-weight: bold;
   font-size: 13px;
+}
+
+.checkboxDiv {
+  flex-direction: row;
+}
+
+.checkbox {
+  width: 30px;
+  flex: 1;
+}
+
+.checkboxLabel {
+  flex: 9;
+}
+
+.settings {
+  flex: 9
 }

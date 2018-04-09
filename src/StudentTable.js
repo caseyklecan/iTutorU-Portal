@@ -12,6 +12,7 @@ class StudentTable extends Component {
       student_list.push(student);
     }
 
+    //student that needs to register
     if (this.props.registering == true) {
       return(
         student_list.map((item) => {
@@ -22,12 +23,17 @@ class StudentTable extends Component {
             address={item.address}
             studentID = {item.studentID}
             registering = {this.props.registering}
+            subjects = {item.subjects}
+            grade = {item.grade}
+            allSubjects = {this.props.subjects}
+            studentID = {item.studentID}
           />
         }
         )
       );
     }
     else {
+      //already signed up
       return(
         student_list.map((item) => {
           return <StudentTableRow
@@ -36,6 +42,7 @@ class StudentTable extends Component {
             grade={item.childData.grade}
             allData={item}
             registering = {this.props.registering}
+            allSubjects = {this.props.subjects}
           />
         }
         )

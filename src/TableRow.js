@@ -5,7 +5,7 @@ import MessagesPopup from './MessagesPopup';
 import { getConversation, registerStudent } from './FirebaseManager';
 
 export default class TableRow extends Component {
-
+  //FOR TUTORS
   state = {
     showPopup: false,
     buttonText: this.props.pending ? "Contact" : "View",
@@ -32,6 +32,10 @@ export default class TableRow extends Component {
     this.setState({pending: false, approved: true})
   }
 
+  onClickReject() {
+    {/*this.setState({pending:false, approved: false}) delete from database*/}
+
+  }
 
   render() {
     return (
@@ -40,8 +44,9 @@ export default class TableRow extends Component {
         <td>{this.props.subjects}</td>
         <td>{this.props.email}</td>
         <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
-        {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Tutor" pending = {this.props.pending} /> : null}
-        {this.props.pending ? <button className="approve" onClick={() => this.onClickApprove()}>Approve</button> : null }
+        {this.state.showPopup ? <Popup data={this.props.allData} subjects = {this.props.allSubjects} call={this.closePopup} type="Tutor" pending = {this.props.pending} /> : null}
+        {this.props.pending ? <button className="view" onClick={() => this.onClickApprove()}>Approve</button> : null }
+        {this.props.pending ? <button className="approve" onClick={() => this.onClickReject()}>Reject</button> : null}
         {this.state.approved ? <Popup text="Tutor is approved!" call={this.closePopup} pending ={this.props.pending} /> : null}
       </tr>
     );
@@ -54,6 +59,7 @@ export class StudentTableRow extends Component {
     showPopup: false,
     buttonText: "View",
     registered: false,
+    subjects: [],
   }
 
   onClickView() {
@@ -77,6 +83,12 @@ export class StudentTableRow extends Component {
     }
   }
 
+  editSubjects() {
+    //open popup and pass in subject info
+    console.log("subjects: " + this.props.subjects);
+    this.setState({showPopup: true})
+  }
+
   render() {
     if (this.props.registering) {
       if (!this.state.registered) {
@@ -86,11 +98,15 @@ export class StudentTableRow extends Component {
             <td>{this.props.studentName}</td>
             <td>{this.props.address}</td>
             <td>{this.props.phone}</td>
-            <button className="view" onClick={()=>this.onClickRegister()}>Remove</button>
+            <button className="view" onClick={()=>this.editSubjects()}>Set Subject(s)</button>
+            <button className="approve" onClick={()=>this.onClickRegister()}>Remove</button>
+
+            {this.state.showPopup ? <Popup subjects = {this.props.subjects} id = {this.props.studentID} allSubjects = {this.props.allSubjects} grade = {this.props.grade} call={this.closePopup} type="NewStudent" className="popup"/> : null}
           </tr>
         );
       }
       else {
+        //don't show row if they've been approved
         return (
           <tr>
           </tr>
@@ -100,6 +116,7 @@ export class StudentTableRow extends Component {
       }
     }
     else {
+      //active student
       return (
         <tr>
           <td>{this.props.studentName}</td>
@@ -107,7 +124,7 @@ export class StudentTableRow extends Component {
           <td>{this.props.grade}</td>
 
           <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
-          {this.state.showPopup ? <Popup data={this.props.allData} call={this.closePopup} type="Student" className="popup"/> : null}
+          {this.state.showPopup ? <Popup data={this.props.allData} allSubjects = {this.props.allSubjects} call={this.closePopup} type="Student" className="popup"/> : null}
           </tr>
       );
     }

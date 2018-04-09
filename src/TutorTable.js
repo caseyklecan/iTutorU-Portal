@@ -9,7 +9,7 @@ class TutorTable extends Component {
     var len = this.props.data.length;
     for (var i = 0; i < len; i++) {
       var tutor = this.props.data[i];
-      tutor_list.push(tutor);
+      if (tutor.childData.name != "null") tutor_list.push(tutor);
     }
 
 
@@ -21,6 +21,7 @@ class TutorTable extends Component {
           email={item.childData.email}
           uid = {item.childKey}
           pending = {this.props.pending}
+          allSubjects = {this.props.subjects}
           allData={item}
         />
       }

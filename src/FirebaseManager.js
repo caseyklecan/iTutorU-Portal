@@ -51,6 +51,15 @@ export function getStudentsOfTutor(uid) {
   });
 }
 
+export function updateSubjects(id, subjects) {
+  if (subjects.length > 0) {
+    firebase.database().ref('students/' + id).update({
+      subjectList: subjects,
+    });
+  }
+
+}
+
 
 export function returnPendingTutors() {
   return new Promise((resolve, reject) => {
@@ -79,22 +88,24 @@ export function returnUnregisteredStudents() {
       snapshot.forEach(function(childSnapshot) {
         var parentKey = childSnapshot.key;
         getStudentsOfParent(parentKey).then(function(res) {
-          //console.log("GOT STUDENTS OF PARENT " + parentKey);
-          //console.log(res);
-          //res = array of STUDENTS
           if (res != null) {
+            console.log(res);
             res.forEach(function(child) {
               //console.log("CHILD: ");
-              //console.log(child);
+              console.log(child);
               returnStudent(child).then(function(studentInfo) {
-                //console.log(studentInfo.val());
-                if (!studentInfo.val().registered) {
-                  //console.log(childSnapshot.val());
-                  var info = {studentID: child, parentName: childSnapshot.val().parentName, studentName: studentInfo.val().studentName, phone: childSnapshot.val().phoneNumber, address: studentInfo.val().address}
-                  //console.log("info:");
-                  //console.log(info);
-                  info_list.push(info);
+                console.log(studentInfo.val());
+                if (studentInfo.val() != null) {
+                  //console.log(studentInfo.val());
+                  if (!studentInfo.val().registered) {
+                    //console.log(childSnapshot.val());
+                    var info = {studentID: child, parentName: childSnapshot.val().parentName, studentName: studentInfo.val().studentName, phone: childSnapshot.val().phoneNumber, address: studentInfo.val().address, subjects: studentInfo.val().subject, grade: studentInfo.val().grade}
+                    //console.log("info:");
+                    //console.log(info);
+                    info_list.push(info);
+                  }
                 }
+
               })
             });
           }
@@ -298,9 +309,29 @@ export function returnPairData() {
   });
 }
 
+export function returnSubjects() {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('subjects/').once('value').then(function(snapshot) {
+      resolve(snapshot.val());
+    });
+  });
+
+
+
+}
+
 export function deleteFromFirebase(type, ID) {
-  var ref = firebase.database().ref(type + '/' + ID);
-  ref.remove();
+
+  var ref = firebase.database().ref(type + '/');
+  console.log(ref);
+  ref.update({
+    [ID]: null,
+  });
+/*
+  firebase.database().ref(type + '/' + ID).once('value').then(function(snapshot) {
+    snapshot.remove();
+  });
+  */
 }
 
 export function updateStudent(updatedInfo) {
