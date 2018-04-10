@@ -27,6 +27,8 @@ class Popup extends React.Component {
     showDeleteButton: false,
     subjects: [],
     checkedSubjects: [],
+    /* variables for info */
+    props: {},
   }
 
   onClickClose() {
@@ -35,6 +37,9 @@ class Popup extends React.Component {
 
   componentWillMount() {
     console.log(this.props);
+    if (this.props.type != "NewStudent") {
+      this.setState({props: this.props.data.childData});
+    }
     if (!this.props.pending && this.props.type === "Tutor") {
     getStudentsOfTutor(this.props.data.childKey).then(res => {
       this.setState({ students: res})
@@ -51,6 +56,9 @@ class Popup extends React.Component {
      });
 
    }
+
+   console.log("PROPS");
+   console.log(this.props);
   }
 
   showStudents() {
@@ -79,7 +87,7 @@ class Popup extends React.Component {
         this.state.updatedInfoStudent.grade = this.props.data.childData.grade;
         this.state.updatedInfoStudent.ID = this.props.data.childKey;
         this.state.updatedInfoStudent.name = this.props.data.childData.studentName;
-        this.state.updatedInfoStudent.city = this.props.data.childData.city;
+        this.state.updatedInfoStudent.city = this.props.data.childData.address;
         this.state.updatedInfoStudent.subject = this.props.data.childData.subjects;
       }
       this.state.editText = "Done";
@@ -91,6 +99,12 @@ class Popup extends React.Component {
       /* finish editing - save updated info to database */
       if (this.props.type === "Tutor") {
         updateTutor(this.state.updatedInfoTutor);
+        this.state.props.degree = this.state.updatedInfoTutor.degree;
+        this.state.props.email = this.state.updatedInfoTutor.email;
+        this.state.props.phone = this.state.updatedInfoTutor.phone;
+        this.state.props.name = this.state.updatedInfoTutor.name;
+        this.state.props.city = this.state.updatedInfoTutor.city;
+        this.state.props.subjects = this.state.updatedInfoTutor.subjects;
       }
       else {
         console.log("NEW INFO: ");
@@ -98,6 +112,10 @@ class Popup extends React.Component {
         console.log("OLD");
         console.log(this.props);
         updateStudent(this.state.updatedInfoStudent);
+        this.state.props.grade = this.state.updatedInfoStudent.grade;
+        this.state.props.studentName = this.state.updatedInfoStudent.name;
+        this.state.props.address = this.state.updatedInfoStudent.city;
+        this.state.props.subjects = this.state.updatedInfoStudent.subjects;
       }
     }
 
@@ -196,11 +214,11 @@ class Popup extends React.Component {
             </label>
             <label>
               City:
-              <input type="text" value={this.state.updatedInfoStudent.city} placeholder={this.props.data.childData.city} onChange={(event) => this.handleChangeStudentCity(event)} />
+              <input type="text" value={this.state.updatedInfoStudent.city} onChange={(event) => this.handleChangeStudentCity(event)} />
             </label>
             <label>
               Grade:
-              <input type="text" value={this.state.updatedInfoStudent.grade} placeholder={this.props.data.grade} onChange={(event) => this.handleChangeStudentGrade(event)} />
+              <input type="text" value={this.state.updatedInfoStudent.grade} onChange={(event) => this.handleChangeStudentGrade(event)} />
             </label>
           </form>
         );
@@ -227,12 +245,12 @@ class Popup extends React.Component {
           /* TUTOR INFO POPUP */
         return (
           <div>
-          <h2>{this.props.data.childData.name}</h2>
+          <h2>{this.state.props.name}</h2>
           <h4>{this.props.type}</h4>
-          <h4>Subject(s): {this.props.data.childData.subjects}</h4>
-          <h4>City: {this.props.data.childData.city}</h4>
-          <h4>Degree: {this.props.data.childData.degree}</h4>
-          <h4>Phone Number: {this.props.data.childData.phone}</h4>
+          <h4>Subject(s): {this.state.props.subjects}</h4>
+          <h4>City: {this.state.props.city}</h4>
+          <h4>Degree: {this.state.props.degree}</h4>
+          <h4>Phone Number: {this.state.props.phone}</h4>
 
           <h3>Students</h3>
           {this.showStudents()}
@@ -248,11 +266,11 @@ class Popup extends React.Component {
       /* STUDENT POPUP */
       return (
         <div>
-        <h4>{this.props.data.childData.studentName}</h4>
+        <h4>{this.state.props.studentName}</h4>
         <h4>{this.props.type}</h4>
-        <h4>Subject(s): {this.props.data.childData.subjects}</h4>
-        <h4>City: {this.props.data.childData.city}</h4>
-        <h4>Grade: {this.props.data.childData.grade}</h4>
+        <h4>Subject(s): {this.state.props.subject}</h4>
+        <h4>City: {this.state.props.address}</h4>
+        <h4>Grade: {this.state.props.grade}</h4>
         </div>
       );
 
@@ -301,6 +319,7 @@ class Popup extends React.Component {
   saveSubjects() {
 
     updateSubjects(this.props.id, this.state.checkedSubjects);
+    this.props.call(false);
   }
 
   render() {
@@ -319,7 +338,6 @@ class Popup extends React.Component {
           <h4>Grade: {this.props.grade}</h4>
           <h4><center>Select matching subjects below:</center></h4>
 
-          {/* show checkboxes of subjects */}
           {this.showSubjects()}
           <button onClick={()=>this.saveSubjects()} className="closeButton">Close</button>
         </div>

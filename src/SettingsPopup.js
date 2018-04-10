@@ -21,6 +21,7 @@ class SettingsPopup extends React.Component {
     showModal: true,
     subjects: this.props.subjects,
     checkedSubjects: [],
+    newSubject: '',
   }
 
   onClickClose() {
@@ -47,10 +48,10 @@ class SettingsPopup extends React.Component {
         })}
         <label>
           New Subject:
-          <input type="text" value={this.state.newSubject} onChange={(event) => this.handleAddNewSubject(event)} />
+          <input for="add-button" type="text" value={this.state.newSubject} onChange={(event) => this.handleAddNewSubject(event)} />
         </label>
-          <button onClick={()=>this.addSubject()} className="closeButton">Add</button>
-          <button onClick= {()=>this.deleteSubjects()} className="deleteButton">Delete Selected Subjects</button>
+          <button type="button" onClick={() => this.addSubject()} name="add-button" className="closeButton">Add</button>
+          <button type="button" onClick= {()=>this.deleteSubjects()} className="deleteButton">Delete Selected Subjects</button>
         </form>
       </div>
     );
@@ -73,9 +74,11 @@ class SettingsPopup extends React.Component {
   }
 
   addSubject() {
+
     this.state.subjects.push(this.state.newSubject);
     this.state.newSubject = "";
     this.setState(this.state);
+
     {/* TODO: handle connect with firebase */}
 
   }
