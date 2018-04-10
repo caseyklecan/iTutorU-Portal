@@ -7,10 +7,28 @@ class TutorTable extends Component {
   renderRows() {
     var tutor_list = []
     var len = this.props.data.length;
-    for (var i = 0; i < len; i++) {
-      var tutor = this.props.data[i];
-      if (tutor.childData.name != "null") tutor_list.push(tutor);
+
+    if (this.props.pending) {
+      //pending tutors table
+      for (var i = 0; i < len; i++) {
+        var tutor = this.props.data[i];
+        if (tutor.childData.name != "null"){
+          if (tutor.childData.frozen && this.props.pending) tutor_list.push(tutor);
+
+        }
+      }
     }
+    else {
+      for (var i = 0; i < len; i++) {
+        var tutor = this.props.data[i];
+        if (tutor.childData.name != "null"){
+          if (!tutor.childData.frozen && !this.props.pending) tutor_list.push(tutor);
+
+        }
+      }
+    }
+
+
 
 
     return(

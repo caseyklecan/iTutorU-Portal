@@ -42,10 +42,15 @@ export function getStudentsOfTutor(uid) {
 export function updateSubjects(id, subjects) {
   if (subjects.length > 0) {
     firebase.database().ref('students/' + id).update({
-      subjectList: subjects,
+      subjects: subjects,
     });
   }
+}
 
+export function updateAllSubjects(subjects) {
+  firebase.database().ref().update({
+    subjects: subjects,
+  })
 }
 
 

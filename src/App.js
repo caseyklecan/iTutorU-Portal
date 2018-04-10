@@ -39,6 +39,18 @@ class App extends Component {
           this.setState({ tutorData: res});
         }),
 
+        returnUnregisteredStudents().then(res => {
+          console.log("FINISHED GETTING STUDENTS");
+          console.log(res);
+          console.log(res.length);
+          this.setState({unregisteredStudents: res});
+
+          if (this.state.unregisteredStudents.length > 0) {
+            this.setState({areNewStudents: true});
+          }
+
+        }),
+
         returnStudentData().then(res => {
           this.setState({ studentData: res});
           console.log(res); /* has childData and childKey */
@@ -55,11 +67,7 @@ class App extends Component {
           this.setState({subjects: res});
         }),
 
-        returnUnregisteredStudents().then(res => {
-          console.log("FINISHED GETTING STUDENTS");
-          console.log(res);
-          this.setState({unregisteredStudents: res});
-        }),
+
 
       returnPairData().then(res => {
           //result is student->tutor pairs
@@ -74,6 +82,7 @@ class App extends Component {
 
 
         this.setState({initialized: true})
+        this.setState({loggedIn: true})
     }
 
     onClickLogin(email, password) {
@@ -81,7 +90,7 @@ class App extends Component {
           userType(user.uid).then(type => {
           if (type === 'admin') {
               this.loadData();
-              this.setState({loggedIn: true});
+              //this.setState({loggedIn: true});
           }})
       });
     }
@@ -116,7 +125,7 @@ class App extends Component {
 
            {this.state.areNewStudents ?
             <div className="content">
-              <h1><center>New Students</center></h1>
+              <h2><center>New Students</center></h2>
               <StudentTable className="tutorTable" data = {this.state.unregisteredStudents} subjects = {this.state.subjects} registering = {true} />
             </div>
             : null

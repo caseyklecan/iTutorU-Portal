@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal } from 'react-overlays';
+import {updateAllSubjects} from './FirebaseManager';
 
 const modalStyle = {
   position: 'fixed',
@@ -31,7 +32,7 @@ class SettingsPopup extends React.Component {
 
   showSubjects() {
     return (
-      <div>
+      <div className="popup-data">
         <h4>Add/Remove Subjects</h4>
         <form>
         {this.state.subjects.map((sub) => {
@@ -71,6 +72,7 @@ class SettingsPopup extends React.Component {
       this.setState(this.state);
     });
     {/*  todo: connect with firebase */}
+    updateAllSubjects(this.state.subjects);
   }
 
   addSubject() {
@@ -80,6 +82,7 @@ class SettingsPopup extends React.Component {
     this.setState(this.state);
 
     {/* TODO: handle connect with firebase */}
+    updateAllSubjects(this.state.subjects);
 
   }
 
@@ -96,8 +99,8 @@ class SettingsPopup extends React.Component {
         show={true}
         onHide={this.close}
         >
-      <div className="popup">
-        {this.showSubjects()}
+      <div className="popup" style={{ height: '80%', width: '60%'}}>
+          {this.showSubjects()}
         <button onClick={()=>this.onClickClose()} className="closeButton">Close</button>
       </div>
     </Modal>

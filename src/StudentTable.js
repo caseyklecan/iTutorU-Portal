@@ -12,7 +12,7 @@ class StudentTable extends Component {
       student_list.push(student);
     }
 
-    //student that needs to register
+    //student that needs to register (returns table for new students)
     if (this.props.registering == true) {
       return(
         student_list.map((item) => {
@@ -33,7 +33,7 @@ class StudentTable extends Component {
       );
     }
     else {
-      //already signed up
+      //student is already signed up (returns table in "students" tab)
       return(
         student_list.map((item) => {
           return <StudentTableRow
@@ -52,8 +52,8 @@ class StudentTable extends Component {
   }
 
   render() {
-    console.log("registering: " + this.props.registering);
     if (this.props.registering == false) {
+      //shows table headers for new students table
       return (
         <table>
           <tbody>
@@ -69,6 +69,7 @@ class StudentTable extends Component {
       );
     }
     else {
+      //shows table headers for students tab
       return (
         <table>
           <tbody>
