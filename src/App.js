@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, initialize, returnPairData, returnEmail, returnPass, returnUnregisteredStudents, returnSubjects } from './FirebaseManager';
+import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, returnPairData, checkLoginCredentials, returnUnregisteredStudents, returnSubjects, getLoggedInUserPromise, userType } from './FirebaseManager';
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
 import PairsTable from './PairsTable';
@@ -13,6 +13,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.onClickLogin = this.onClickLogin.bind(this);
+    this.loadData = this.loadData.bind(this);
   }
 
   state = {
@@ -22,18 +23,19 @@ class App extends Component {
       initialized: false,
       arePendingTutors: true,
       pairData: [],
-      correctEmail: "",
-      correctPass: "",
       areNewStudents: true,
       unregisteredStudents: {},
       subjects: [],
       showSettings: false,
+      loggedIn: false
     }
 
     componentWillMount() {
-      if (this.state.initialized === false) {
-      initialize().then(res =>
-        returnTutorData().then(res => {
+
+    }
+
+    loadData() {
+      returnTutorData().then(res => {
           this.setState({ tutorData: res});
         }),
 
@@ -48,15 +50,6 @@ class App extends Component {
             this.setState({arePendingTutors : false})
           }
         }),
-/*
-        returnEmail().then(res => {
-          this.setState({correctEmail: JSON.stringify(res)})
-        }),
-
-        returnPass().then(res => {
-          this.setState({correctPass: JSON.stringify(res)})
-        }),
-        */
 
         returnSubjects().then(res => {
           this.setState({subjects: res});
@@ -66,8 +59,7 @@ class App extends Component {
           console.log("FINISHED GETTING STUDENTS");
           console.log(res);
           this.setState({unregisteredStudents: res});
-        })
-      );
+        }),
 
       returnPairData().then(res => {
           //result is student->tutor pairs
@@ -78,18 +70,20 @@ class App extends Component {
           //this.state.pairData = res;
           //this.setState(this.state);
           console.log("set the state for pairs");
-        })
-    }
-      this.setState({initialized: true})
+        });
+
+
+        this.setState({initialized: true})
     }
 
     onClickLogin(email, password) {
-      /*
-      if (JSON.stringify(email) === this.state.correctEmail && JSON.stringify(password) === this.state.correctPass) {
-        this.setState({loggedIn: true, correctEmail: "", correctPass: ""})
-      }
-      */
-      this.setState({loggedIn: true});
+      checkLoginCredentials(email, password).then(user => {
+          userType(user.uid).then(type => {
+          if (type === 'admin') {
+              this.loadData();
+              this.setState({loggedIn: true});
+          }})
+      });
     }
 
     showSettings() {
@@ -150,7 +144,7 @@ class App extends Component {
 
               <TabPanel>
                 <h2>All Students</h2>
-                <StudentTable className="tutorTable" data = {this.state.studentData} subjects = {this.state.subjects} />
+                <StudentTable className="tutorTable" data = {this.state.studentData} subjects = {this.state.subjects} registering = {false} />
               </TabPanel>
 
               <TabPanel>
@@ -170,19 +164,19 @@ class App extends Component {
             <h1 className="App-title">iTutorU Admin</h1>
           </header>
           <div className="login">
-            <form method="POST">
+
               <label>Email:<br />
               <input type="text" name="email" id="emailInput" />
               </label><br />
               <label>Password:<br />
               <input type="password" name="password" id="passInput" />
               </label> <br />
-              <input type="submit" value="Log In" onClick={() => {
+              <input type="button" value="Log In" onClick={() => {
                 var email = document.getElementById("emailInput").value;
                 var pass = document.getElementById("passInput").value;
                 this.onClickLogin(email, pass);
               }}/>
-            </form>
+
           </div>
         </div>
       )

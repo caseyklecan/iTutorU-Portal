@@ -19,18 +19,6 @@ const config = {
   messagingSenderId: "842705651129"
 }
 
-export function initialize() {
-    firebase.initializeApp(config);
-    return new Promise((resolve, reject) => {
-      signIn("testing@test.com", "password").then(res => {
-        resolve(true);
-      }
-    );
-    })
-
-
-}
-
 export function approveTutor(uid) {
   //write to database and set frozen to be false
   var updates = {};
@@ -223,28 +211,6 @@ export function returnStudent(uid) {
   });
 }
 
-// export function returnEmail() {
-//   return new Promise((resolve, reject) => {
-//     firebase.database().ref('admin/email').once('value').then(function(snapshot) {
-//           resolve(snapshot);
-//         }
-//     ).catch((error) => {
-//       reject(error);
-//     });
-//   });
-// }
-//
-// export function returnPass() {
-//   return new Promise((resolve, reject) => {
-//     firebase.database().ref('admin/password').once('value').then(function(snapshot) {
-//           resolve(snapshot);
-//         }
-//     ).catch((error) => {
-//       reject(error);
-//     });
-//   });
-// }
-
 function signIn(email, password) {
     return new Promise((resolve, reject) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
@@ -271,8 +237,46 @@ export function unFreezeStudent(user) {
 }
 
 export function checkLoginCredentials(email, password) {
+  firebase.initializeApp(config);
+  return new Promise((resolve, reject) => {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((user) => {
+              resolve(user);
+            })
+            .catch((error) => {
+              reject(error.message);
+            });
+    })
+}
 
+export function getLoggedInUserPromise() {
+    return new Promise((resolve, reject) => {
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                resolve(user);
+            } else {
+                // No user is signed in.
+                reject(null);
+            }
+        });
+    })
+}
 
+export function userType(uid) {
+    return new Promise((resolve, reject) => {
+        var ref = firebase.database().ref('admin');
+        ref.once("value").then(snapshot => {
+            console.log("came back from the ref");
+            if (snapshot.child(uid + "").exists()) {
+                console.log("child exists");
+                resolve('admin');
+                // ref.off();
+            }
+            else {
+                resolve('non-admin');
+            }
+        });
+    })
 }
 
 export function returnPairData() {
@@ -371,27 +375,4 @@ export function getConversation(studentID, tutorID) {
 
   });
 
-}
-
-// todo get rid of these & use auth to login
-export function returnEmail() {
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('admin/email').once('value').then(function(snapshot) {
-          resolve(snapshot);
-        }
-    ).catch((error) => {
-      reject(error);
-    });
-  });
-}
-
-export function returnPass() {
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('admin/password').once('value').then(function(snapshot) {
-          resolve(snapshot);
-        }
-    ).catch((error) => {
-      reject(error);
-    });
-  });
 }
