@@ -114,10 +114,6 @@ class App extends Component {
             <button className="settings" onClick={() => this.showSettings()} className="approve">Settings</button>
           </header>
 
-          {/*<div className="search">
-              <input type="text" className="searchTerm" placeholder="Who are you looking for?"/>
-           </div>*/}
-
            {this.state.showSettings ?
              <SettingsPopup subjects={this.state.subjects} call={this.closePopup} />
              : null
@@ -170,7 +166,7 @@ class App extends Component {
       return (
         <div className="App">
           <header className="App-header">
-            <h1 className="App-title">iTutorU Admin</h1>
+            <h1 className="App-title-before">iTutorU Admin</h1>
           </header>
           <div className="login">
 

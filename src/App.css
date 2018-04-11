@@ -2,23 +2,37 @@
 @import url('https://unpkg.com/react-tabs@2/style/react-tabs.css');
 
 .App {
-  text-align: center;
   font-family: 'Lato', sans-serif;
   position: relative;
 }
 
 .App-header {
   background-color: #007AFF;
-  height: 10%;
+  height: 250;
   padding: 20px;
   color: white;
   margin-bottom: 0;
   flex-direction: row;
+  display: flex;
+}
+
+.App-title-before {
+  text-align: center;
+  font-size: 1.6em;
+  font-weight: 400;
+  flex: 5;
 }
 
 .App-title {
+  text-align: center;
+  padding-left: 10%;
   font-size: 1.6em;
   font-weight: 400;
+  flex: 5;
+}
+
+.settings {
+  flex: 9;
 }
 
 .content {
@@ -266,8 +280,4 @@ input[type=submit] {
 
 .checkboxLabel {
   flex: 9;
-}
-
-.settings {
-  flex: 9
 }
