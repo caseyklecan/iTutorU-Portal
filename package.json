@@ -1,6 +1,6 @@
 {
   "name": "itutoru-portal",
-  "homepage": "http://itutoru-admin.surge.sh/",
+  "homepage": "itutoru-admin.surge.sh/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
