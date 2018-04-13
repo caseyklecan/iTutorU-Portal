@@ -36,7 +36,7 @@ class TutorTable extends Component {
         return <TableRow
           name={item.childData.name}
           subjects={item.childData.subjects}
-          email={item.childData.email}
+          city={item.childData.city}
           uid = {item.childKey}
           pending = {this.props.pending}
           allSubjects = {this.props.subjects}
@@ -49,14 +49,12 @@ class TutorTable extends Component {
 
   render() {
     return (
-      // const data = this.props();
-      // const { data } = this.props;
       <table>
         <tbody>
         <tr>
           <th>Tutor</th>
           <th>Subject(s)</th>
-          <th>Email</th>
+          <th>City</th>
           <th>Options</th>
         </tr>
         {this.renderRows()}

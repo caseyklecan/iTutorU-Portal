@@ -157,8 +157,13 @@ table {
   border-radius: 10px;
 }
 
-.popup-data {
+.popup-data-settings {
   height: 90%;
+  overflow: scroll;
+}
+
+.popup-data {
+  height: 65%;
   overflow: scroll;
 }
 

@@ -32,7 +32,7 @@ class SettingsPopup extends React.Component {
 
   showSubjects() {
     return (
-      <div className="popup-data">
+      <div className="popup-data-settings">
         <h4>Add/Remove Subjects</h4>
         <form>
         {this.state.subjects.map((sub) => {

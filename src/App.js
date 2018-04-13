@@ -40,9 +40,6 @@ class App extends Component {
         }),
 
         returnUnregisteredStudents().then(res => {
-          console.log("FINISHED GETTING STUDENTS");
-          console.log(res);
-          console.log(res.length);
           this.setState({unregisteredStudents: res});
 
           if (this.state.unregisteredStudents.length > 0) {
@@ -53,7 +50,7 @@ class App extends Component {
 
         returnStudentData().then(res => {
           this.setState({ studentData: res});
-          console.log(res); /* has childData and childKey */
+          /* has data and key */
         }),
 
         returnPendingTutors().then(res => {
@@ -71,13 +68,7 @@ class App extends Component {
 
       returnPairData().then(res => {
           //result is student->tutor pairs
-          //console.log("res: " + JSON.stringify(res));
-          console.log(res);
-          console.log('HELLO');
           this.setState({ pairData: res });
-          //this.state.pairData = res;
-          //this.setState(this.state);
-          console.log("set the state for pairs");
         });
 
 
@@ -137,7 +128,7 @@ class App extends Component {
               <TabList>
                 <Tab>Pending Tutors</Tab>
                 <Tab>Active Tutors</Tab>
-                <Tab>Students</Tab>
+                <Tab>Active Students</Tab>
                 <Tab>Tutor-Student Pairs</Tab>
               </TabList>
 
@@ -152,7 +143,7 @@ class App extends Component {
               </TabPanel>
 
               <TabPanel>
-                <h2>All Students</h2>
+                <h2>Active Students</h2>
                 <StudentTable className="tutorTable" data = {this.state.studentData} subjects = {this.state.subjects} registering = {false} />
               </TabPanel>
 
@@ -180,7 +171,7 @@ class App extends Component {
               <label>Password:<br />
               <input type="password" name="password" id="passInput" />
               </label> <br />
-              <input type="button" value="Log In" onClick={() => {
+              <input type="button" className="closeButton" value="Log In" onClick={() => {
                 var email = document.getElementById("emailInput").value;
                 var pass = document.getElementById("passInput").value;
                 this.onClickLogin(email, pass);
