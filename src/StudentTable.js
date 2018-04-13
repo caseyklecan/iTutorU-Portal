@@ -36,14 +36,16 @@ class StudentTable extends Component {
       //student is already signed up (returns table in "students" tab)
       return(
         student_list.map((item) => {
-          return <StudentTableRow
-            studentName={item.childData.studentName}
-            subjects={item.childData.subject}
-            grade={item.childData.grade}
-            allData={item}
-            registering = {this.props.registering}
-            allSubjects = {this.props.subjects}
-          />
+          if (item.data.registered) {
+            return <StudentTableRow
+              studentName={item.data.studentName}
+              subjects={item.data.subjects}
+              grade={item.data.grade}
+              allData={item}
+              registering = {this.props.registering}
+              allSubjects = {this.props.subjects}
+            />
+          }
         }
         )
       );

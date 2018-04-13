@@ -26,14 +26,19 @@ export function approveTutor(uid) {
   firebase.database().ref().update(updates);
 }
 
+export function rejectTutor(uid) {
+  deleteFromFirebase("tutors", uid);
+}
+
 export function getStudentsOfTutor(uid) {
   var students = [];
   return new Promise((resolve, reject) => {
     firebase.database().ref('tutors/' + uid + '/students/').once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-          var studentName = childSnapshot.val();
-          students.push(studentName);
+          var studentID = childSnapshot.val();
+          students.push(studentID);
         });
+        console.log(students);
         resolve(students);
     }).catch((error) => {reject(error);});
   });
@@ -154,9 +159,9 @@ export function returnStudentData() {
     firebase.database().ref('students/').once('value').then(function(snapshot) {
       var student_list = [];
       snapshot.forEach(function(childSnapshot) {
-        var childKey = childSnapshot.key;
-        var childData = childSnapshot.val();
-        student_list.push({childData, childKey});
+        var key = childSnapshot.key;
+        var data = childSnapshot.val();
+        student_list.push({data, key});
       });
       resolve(student_list);
       //resolve(snapshot.val());
@@ -347,13 +352,17 @@ export function updateStudent(updatedInfo) {
   firebase.database().ref('students/' + updatedInfo.ID).update({
     studentName: updatedInfo.name,
     grade: updatedInfo.grade,
-    city: updatedInfo.city,
+    address: updatedInfo.city,
+
   });
 }
 
 export function updateTutor(updatedInfo) {
-  firebase.database().ref('tutors/').update({
-    [updatedInfo.ID] : updatedInfo,
+  firebase.database().ref('tutors/' + updatedInfo.ID).update({
+    name: updatedInfo.name,
+    city: updatedInfo.city,
+    degree: updatedInfo.degree,
+    phone: updatedInfo.phone,
   });
 }
 

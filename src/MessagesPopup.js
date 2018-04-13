@@ -137,12 +137,11 @@ class MessagesPopup extends React.Component {
           onHide={this.close}
           >
         <div className="popup" style={{ height: '80%'}}>
-          <div className="popup-data">
+          <div className="popup-data-settings">
             {this.showData()}
           </div>
           <button onClick={()=>{
             this.props.call(false);
-            console.log("registered click");
           }} className="closeButton">Close</button>
         </div>
       </Modal>
