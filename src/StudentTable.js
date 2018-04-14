@@ -4,6 +4,7 @@ import './App.css';
 
 class StudentTable extends Component {
   renderRows() {
+    console.log(this.props);
     var student_list = []
     var len = this.props.data.length;
     for (var i = 0; i < len; i++) {
@@ -11,16 +12,18 @@ class StudentTable extends Component {
       console.log(student);
       student_list.push(student);
     }
-
     //student that needs to register (returns table for new students)
     if (this.props.registering == true) {
       return(
         student_list.map((item) => {
+          console.log("HELLOOOOOOOO");
+          console.log(item);
           return <StudentTableRow
             studentName={item.studentName}
             parentName={item.parentName}
             phone={item.phone}
             address={item.address}
+            email={item.email}
             studentID = {item.studentID}
             registering = {this.props.registering}
             subjects = {item.subjects}
@@ -41,6 +44,7 @@ class StudentTable extends Component {
               studentName={item.data.studentName}
               subjects={item.data.subjects}
               grade={item.data.grade}
+              studentID={item.key}
               allData={item}
               registering = {this.props.registering}
               allSubjects = {this.props.subjects}
@@ -78,6 +82,7 @@ class StudentTable extends Component {
           <tr>
             <th>Parent</th>
             <th>Student</th>
+            <th>Parent Email</th>
             <th>Address</th>
             <th>Phone Number</th>
             <th>Options</th>

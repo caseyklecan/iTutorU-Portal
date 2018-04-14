@@ -27,7 +27,10 @@ export function approveTutor(uid) {
 }
 
 export function rejectTutor(uid) {
-  deleteFromFirebase("tutors", uid);
+  //deleteFromFirebase("tutors", uid);
+  var updates = {};
+  updates['tutors/' + uid + '/rejected'] = true;
+  firebase.database().ref().update(updates);
 }
 
 export function getStudentsOfTutor(uid) {
@@ -97,7 +100,14 @@ export function returnUnregisteredStudents() {
                   //console.log(studentInfo.val());
                   if (!studentInfo.val().registered) {
                     //console.log(childSnapshot.val());
-                    var info = {studentID: child, parentName: childSnapshot.val().parentName, studentName: studentInfo.val().studentName, phone: childSnapshot.val().phoneNumber, address: studentInfo.val().address, subjects: studentInfo.val().subject, grade: studentInfo.val().grade}
+                    var info = {studentID: child,
+                      email: childSnapshot.val().email,
+                      parentName: childSnapshot.val().parentName,
+                      studentName: studentInfo.val().studentName,
+                      phone: childSnapshot.val().phoneNumber,
+                      address: studentInfo.val().address,
+                      subjects: studentInfo.val().subject,
+                      grade: studentInfo.val().grade}
                     //console.log("info:");
                     //console.log(info);
                     info_list.push(info);
@@ -152,6 +162,14 @@ export function returnTutorData() {
       });
     })
 
+}
+
+export function updateCheckboxes(uid, checkboxes) {
+  console.log(uid);
+  console.log(checkboxes);
+  firebase.database().ref('tutors/' + uid).update({
+        checkboxes: checkboxes,
+  });
 }
 
 export function returnStudentData() {
@@ -234,6 +252,22 @@ function signIn(email, password) {
 
 }
 
+export function isSignedIn() {
+  firebase.initializeApp(config);
+  return new Promise((resolve, reject) => {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user != null) {
+        console.log("IS SIGNED IN");
+        resolve(true);
+      }
+      else {
+        console.log("IS NOT SIGNED IN");
+        reject(null);
+      }
+    })
+  })
+}
+
 export function unFreezeTutor(user) {
   firebase.database().ref('tutors/' + user).update({
         frozen: false,
@@ -247,7 +281,7 @@ export function unFreezeStudent(user) {
 }
 
 export function checkLoginCredentials(email, password) {
-  firebase.initializeApp(config);
+  //firebase.initializeApp(config);
   return new Promise((resolve, reject) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((user) => {

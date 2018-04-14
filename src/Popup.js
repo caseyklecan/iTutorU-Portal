@@ -54,6 +54,7 @@ export class SetSubjectsPopup extends React.Component {
   }
 
   componentWillMount() {
+    /*
     if (this.props.type === 'NewStudent') {
       //load subjects
       console.log("loading subjects");
@@ -62,6 +63,11 @@ export class SetSubjectsPopup extends React.Component {
         this.setState(this.state);
       });
 
+    }
+    */
+    if (this.props.type === "student") {
+      //add current subjects to checkedSubjects
+      this.setState({checkedSubjects: this.props.subjects})
     }
   }
 
@@ -86,7 +92,11 @@ export class SetSubjectsPopup extends React.Component {
       {this.props.allSubjects.map((sub) => {
         return (
           <div className="checkboxDiv">
+          {this.state.checkedSubjects.indexOf(sub) == -1 ?
             <input className="checkbox" type="checkbox" name="checkbox" value={sub} onChange={(event) => this.handleCheck(event, sub)} />
+            :
+            <input className="checkbox" type="checkbox" name="checkbox" value={sub} onChange={(event) => this.handleCheck(event, sub)} checked />
+          }
             <label className="checkboxLabel">
               {sub}
             </label>
@@ -109,25 +119,47 @@ export class SetSubjectsPopup extends React.Component {
 
 
   render() {
-    return (
-      <Modal
-        aria-labelledby='modal-label'
-        style={modalStyle}
-        backdropStyle={backdropStyle}
-        show={true}
-        onHide={this.close}
-        >
-      <div className="popup" style={{ height: '80%', width: '60%'}}>
+    if (this.props.type === "NewStudent") {
+      return (
+        <Modal
+          aria-labelledby='modal-label'
+          style={modalStyle}
+          backdropStyle={backdropStyle}
+          show={true}
+          onHide={this.close}
+          >
+        <div className="popup" style={{ height: '80%', width: '60%'}}>
 
-        <h3>{`Parent wrote: \"${this.props.subjects}\"`}</h3>
-        <h4>Grade: {this.props.grade}</h4>
-        <h4><center>Select matching subjects below:</center></h4>
+          <h3>{`Parent wrote: \"${this.props.subjects}\"`}</h3>
+          <h4>Grade: {this.props.grade}</h4>
+          <h4><center>Select matching subjects below:</center></h4>
 
-        {this.showSubjects()}
-        <button onClick={()=>this.saveSubjects()} className="closeButton">Close</button>
-      </div>
-    </Modal>
-    );
+          {this.showSubjects()}
+          <button onClick={()=>this.saveSubjects()} className="closeButton">Close</button>
+        </div>
+      </Modal>
+      );
+    }
+    else {
+      return (
+        <Modal
+          aria-labelledby='modal-label'
+          style={modalStyle}
+          backdropStyle={backdropStyle}
+          show={true}
+          onHide={this.close}
+          >
+        <div className="popup" style={{ height: '80%', width: '60%'}}>
+
+          <h3>{`Subjects: \"${this.props.subjects}\"`}</h3>
+          <h4><center>Select new subjects below:</center></h4>
+
+          {this.showSubjects()}
+          <button onClick={()=>this.saveSubjects()} className="closeButton">Close</button>
+        </div>
+      </Modal>
+      );
+    }
   }
 
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {ApprovedPopup, ViewUserPopup, PendingPopup, SetSubjectsPopup} from './Popup';
 import './App.css';
 import MessagesPopup from './MessagesPopup';
-import { getConversation, registerStudent, getStudentsOfTutor, returnStudent, approveTutor, rejectTutor } from './FirebaseManager';
+import { getConversation, registerStudent, getStudentsOfTutor, returnStudent, approveTutor, rejectTutor, updateCheckboxes } from './FirebaseManager';
 
 export default class TableRow extends Component {
   //FOR TUTORS
@@ -13,6 +13,9 @@ export default class TableRow extends Component {
     approved: false,
     subjects: '',
     students: [],
+
+    /* only add all these to the database if one is checked */
+    checkboxes: {interviewed: false, checkedRefs: false, madeHiringDecision: false, sentFingerprintDocs: false, cleared: false, sentW9: false, sentWelcome: false}
   }
 
   componentWillMount() {
@@ -31,7 +34,6 @@ export default class TableRow extends Component {
     //get students for approved tutor
     if (!this.props.pending) {
       getStudentsOfTutor(this.props.allData.childKey).then(res => {
-        console.log(res);
         this.setState({ studentIDs: res});
         res.map((studentID) => {
           returnStudent(studentID).then(res2 => {
@@ -43,6 +45,12 @@ export default class TableRow extends Component {
       this.setState(this.state),
       console.log(this.state.students),
     );
+    }
+    else {
+      //see if checkboxes exist
+      if (this.props.allData.childData.checkboxes) {
+        this.setState({checkboxes: this.props.allData.childData.checkboxes});
+      }
     }
   }
 
@@ -70,6 +78,103 @@ export default class TableRow extends Component {
     rejectTutor(this.props.allData.childKey);
   }
 
+  handleCheck(event, title, val) {
+    if (title === "interviewed") {
+      this.state.checkboxes.interviewed = val;
+    }
+    else if (title === "checkedRefs") {
+      this.state.checkboxes.checkedRefs = val;
+    }
+    else if (title === "madeHiringDecision") {
+      this.state.checkboxes.madeHiringDecision = val;
+    }
+    else if (title === "checkedRefs") {
+      this.state.checkboxes.checkedRefs = val;
+    }
+    else if (title === "checkedRefs") {
+      this.state.checkboxes.checkedRefs = val;
+    }
+    this.setState(this.state);
+    updateCheckboxes(this.props.allData.childKey, this.state.checkboxes);
+
+  }
+
+  showCheckList() {
+    return (
+      <form>
+        <div className="checkboxDiv">
+          {this.state.checkboxes.interviewed ?
+            <input className="checkbox" type="checkbox" name="checkbox" value="interviewed" onChange={(event) => this.handleCheck(event, "interviewed", false)} checked />
+            :
+            <input className="checkbox" type="checkbox" name="checkbox" value="interviewed" onChange={(event) => this.handleCheck(event, "interviewed", true)} />
+          }
+          <label className="checkboxLabel">
+            Interviewed
+          </label>
+        </div>
+
+        <div className="checkboxDiv">
+          {this.state.checkboxes.checkedRefs ?
+            <input className="checkbox" type="checkbox" name="checkbox" value="checkedRefs" onChange={(event) => this.handleCheck(event, "checkedRefs", false)} checked />
+            :
+            <input className="checkbox" type="checkbox" name="checkbox" value="checkedRefs" onChange={(event) => this.handleCheck(event, "checkedRefs", true)} />
+          }
+          <label className="checkboxLabel">
+            Checked References
+          </label>
+        </div>
+
+
+        <div className="checkboxDiv">
+          {this.state.checkboxes.madeHiringDecision ?
+            <input className="checkbox" type="checkbox" name="checkbox" value="madeHiringDecision" onChange={(event) => this.handleCheck(event, "madeHiringDecision", false)} checked />
+            :
+            <input className="checkbox" type="checkbox" name="checkbox" value="madeHiringDecision" onChange={(event) => this.handleCheck(event, "madeHiringDecision", true)} />
+          }
+          <label className="checkboxLabel">
+            Made Hiring Decision
+          </label>
+        </div>
+
+
+        <div className="checkboxDiv">
+          {this.state.checkboxes.sentFingerprintDocs ?
+            <input className="checkbox" type="checkbox" name="checkbox" value="sentFingerprintDocs" onChange={(event) => this.handleCheck(event, "sentFingerprintDocs", false)} checked />
+            :
+            <input className="checkbox" type="checkbox" name="checkbox" value="madeHiringDecision" onChange={(event) => this.handleCheck(event, "sentFingerprintDocs", true)} />
+          }
+          <label className="checkboxLabel">
+            Sent Documentation for Fingerprinting
+          </label>
+        </div>
+
+
+        <div className="checkboxDiv">
+          {this.state.checkboxes.cleared ?
+            <input className="checkbox" type="checkbox" name="checkbox" value="cleared" onChange={(event) => this.handleCheck(event, "cleared", false)} checked />
+            :
+            <input className="checkbox" type="checkbox" name="checkbox" value="cleared" onChange={(event) => this.handleCheck(event, "cleared", true)} />
+          }
+          <label className="checkboxLabel">
+            Cleared to Tutor
+          </label>
+        </div>
+
+        <div className="checkboxDiv">
+          {this.state.checkboxes.sentW9 ?
+            <input className="checkbox" type="checkbox" name="checkbox" value="sentW9" onChange={(event) => this.handleCheck(event, "sentW9", false)} checked />
+            :
+            <input className="checkbox" type="checkbox" name="checkbox" value="sentW9" onChange={(event) => this.handleCheck(event, "sentW9", true)} />
+          }
+          <label className="checkboxLabel">
+            Sent W9 Form
+          </label>
+        </div>
+
+      </form>
+    );
+  }
+
   render() {
     //pending tutors table
     if (this.props.pending) {
@@ -84,6 +189,7 @@ export default class TableRow extends Component {
           <button className="approve" onClick={() => this.onClickReject()}>Reject</button>
           {this.state.showResultPopup && this.state.approved ? <ApprovedPopup text="Tutor is approved!" call={this.closePopup} /> : null}
           {this.state.showResultPopup && !this.state.approved ? <ApprovedPopup text="Applicant is rejected." call={this.closePopup} /> : null}
+          {this.showCheckList()}
         </tr>
       );
     }
@@ -109,7 +215,8 @@ export class StudentTableRow extends Component {
     buttonText: "View",
     registered: false,
     subjects: [],
-    subjectstring: ''
+    subjectstring: '',
+    showSubjectsPopup: false,
   }
 
   componentWillMount() {
@@ -129,11 +236,12 @@ export class StudentTableRow extends Component {
       else {
         this.state.subjectstring = this.props.subjects;
       }
-
+      //this.state.subjectstring += " ";
       this.setState(this.state);
     }
 
   }
+
 
   onClickView() {
     if (this.state.buttonText === "View") {
@@ -152,14 +260,20 @@ export class StudentTableRow extends Component {
 
   closePopup = (dataFromPopup) => {
     if (dataFromPopup === false) {
-      this.setState({showPopup: false});
+      this.setState({showPopup: false, showSubjectsPopup: false});
     }
   }
 
   editSubjects() {
-    //open popup and pass in subject info
-    console.log("subjects: " + this.props.subjects);
-    this.setState({showPopup: true})
+    if (this.props.registering) {
+      //open popup and pass in subject info
+      console.log("subjects: " + this.props.subjects);
+      this.setState({showPopup: true})
+    }
+    else {
+      this.setState({showSubjectsPopup: true})
+    }
+
   }
 
   render() {
@@ -170,6 +284,7 @@ export class StudentTableRow extends Component {
           <tr>
             <td>{this.props.parentName}</td>
             <td>{this.props.studentName}</td>
+            <td>{this.props.email}</td>
             <td>{this.props.address}</td>
             <td>{this.props.phone}</td>
             <button className="view" onClick={()=>this.editSubjects()}>Set Subject(s)</button>
@@ -196,7 +311,9 @@ export class StudentTableRow extends Component {
           <td>{this.props.grade}</td>
 
           <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
+          <button className="view" onClick={()=>this.editSubjects()}>Edit Subjects</button>
           {this.state.showPopup ? <ViewUserPopup data={this.props.allData} subjects = {this.state.subjectstring} call={this.closePopup} type="Student" className="popup"/> : null}
+          {this.state.showSubjectsPopup ? <SetSubjectsPopup subjects = {this.props.subjects} id={this.props.studentID} allSubjects={this.props.allSubjects} call={this.closePopup} type="student" className="popup"/> : null}
           </tr>
       );
     }

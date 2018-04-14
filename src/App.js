@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, returnPairData, checkLoginCredentials, returnUnregisteredStudents, returnSubjects, getLoggedInUserPromise, userType } from './FirebaseManager';
+import {returnPendingTutors, returnTutorData, returnStudentData, unFreezeTutor, unFreezeStudent, returnPairData, checkLoginCredentials, returnUnregisteredStudents, returnSubjects, getLoggedInUserPromise, userType, isSignedIn } from './FirebaseManager';
 import TutorTable from './TutorTable';
 import StudentTable from './StudentTable';
 import PairsTable from './PairsTable';
@@ -27,11 +27,19 @@ class App extends Component {
       unregisteredStudents: {},
       subjects: [],
       showSettings: false,
-      loggedIn: false
+      loggedIn: null,
     }
 
     componentWillMount() {
-
+      console.log("app will mount");
+      isSignedIn().then(res => {
+        console.log("resovled");
+        this.loadData();
+        this.setState({ loggedIn: true })
+      }).catch(res => {
+        console.log("rejected");
+        this.setState({ loggedIn: false })
+      });
     }
 
     loadData() {
@@ -130,6 +138,7 @@ class App extends Component {
                 <Tab>Active Tutors</Tab>
                 <Tab>Active Students</Tab>
                 <Tab>Tutor-Student Pairs</Tab>
+                <Tab>Rejected Tutors</Tab>
               </TabList>
 
               <TabPanel>
@@ -152,12 +161,26 @@ class App extends Component {
                   <PairsTable className="tutorTable" data = {this.state.pairData} />
 
               </TabPanel>
+
+              <TabPanel>
+                <h2>Rejected Tutors</h2>
+                <TutorTable className="tutorTable" data = {this.state.tutorData} rejected = {true} />
+              </TabPanel>
             </Tabs>
           </div>
 
         </div>
       );
-    } else {
+    }
+    else if (this.state.loggedIn == null) {
+      return(
+        <div>
+          <h1><center>Loading..</center></h1>
+        </div>
+
+      );
+    }
+    else {
       return (
         <div className="App">
           <header className="App-header">
