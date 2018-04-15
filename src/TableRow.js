@@ -85,14 +85,14 @@ export default class TableRow extends Component {
     else if (title === "checkedRefs") {
       this.state.checkboxes.checkedRefs = val;
     }
-    else if (title === "madeHiringDecision") {
-      this.state.checkboxes.madeHiringDecision = val;
+    else if (title === "sentFingerprintDocs") {
+      this.state.checkboxes.sentFingerprintDocs = val;
     }
-    else if (title === "checkedRefs") {
-      this.state.checkboxes.checkedRefs = val;
+    else if (title === "cleared") {
+      this.state.checkboxes.cleared = val;
     }
-    else if (title === "checkedRefs") {
-      this.state.checkboxes.checkedRefs = val;
+    else if (title === "sentW9") {
+      this.state.checkboxes.sentW9 = val;
     }
     this.setState(this.state);
     updateCheckboxes(this.props.allData.childKey, this.state.checkboxes);

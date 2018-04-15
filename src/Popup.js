@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-overlays';
 import {getStudentsOfTutor, updateTutor, updateStudent, deleteFromFirebase, returnSubjects, updateSubjects, returnStudent} from './FirebaseManager';
+import LearningPlan from './LearningPlan';
 
 const modalStyle = {
   position: 'fixed',
@@ -221,11 +222,13 @@ export class ViewUserPopup extends React.Component {
        this.state.subjects = this.props.subjects;
      }
    }
+   else {
+     if (this.props.data.data.paidSessions != undefined) {
+       this.setState({paidSessions: this.props.data.data.paidSessions});
+     }
+   }
 
    this.setState(this.state);
-   if (this.props.data.data.paidSessions != undefined) {
-     this.setState({paidSessions: this.props.data.data.paidSessions});
-   }
  }
 
  showStudents() {
@@ -463,9 +466,16 @@ export class LearningPlanPopup extends React.Component {
         show={true}
         onHide={this.close}
         >
-      <div className="popup">
-
+      <div className="popup" style={{ height: '80%', width: '50%'}}>
+      <div className="popup-data" style={{height: '90%'}}>
+      <LearningPlan
+          studentName={this.props.data.data.studentName}
+          data={this.props.data.data.learningPlan}
+          studentuid={this.props.data.key}
+         />
+      </div>
         <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
+
       </div>
       </Modal>
 

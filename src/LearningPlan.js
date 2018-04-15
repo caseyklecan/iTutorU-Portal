@@ -82,8 +82,6 @@ class LearningPlanItem extends Component {
             return(
               <div className="learningPlanListItem">
 
-                {listitem.complete? <input className="form-check-input" type="checkbox" onChange={(event) => this.props.onItemMarkComplete(index)} checked/>
-                : <input className="form-check-input" type="checkbox" onChange={(event) => this.props.onItemMarkComplete(index)} />}
                 <p>{listitem.description}</p>
               </div>
             );
