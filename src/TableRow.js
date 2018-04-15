@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {ApprovedPopup, ViewUserPopup, PendingPopup, SetSubjectsPopup} from './Popup';
+import {ApprovedPopup, ViewUserPopup, PendingPopup, SetSubjectsPopup, LearningPlanPopup} from './Popup';
 import './App.css';
 import MessagesPopup from './MessagesPopup';
 import { getConversation, registerStudent, getStudentsOfTutor, returnStudent, approveTutor, rejectTutor, updateCheckboxes } from './FirebaseManager';
@@ -212,11 +212,12 @@ export default class TableRow extends Component {
 export class StudentTableRow extends Component {
   state = {
     showPopup: false,
-    buttonText: "View",
+    buttonText: "View/Edit",
     registered: false,
     subjects: [],
     subjectstring: '',
     showSubjectsPopup: false,
+    showLPPopup: false,
   }
 
   componentWillMount() {
@@ -244,13 +245,10 @@ export class StudentTableRow extends Component {
 
 
   onClickView() {
-    if (this.state.buttonText === "View") {
-      this.setState({ showPopup: true})
 
-    }
-    else {
-      this.setState({buttonText: "View", showPopup: false})
-    }
+    this.setState({ showPopup: true})
+
+
   }
 
   onClickRegister() {
@@ -260,7 +258,7 @@ export class StudentTableRow extends Component {
 
   closePopup = (dataFromPopup) => {
     if (dataFromPopup === false) {
-      this.setState({showPopup: false, showSubjectsPopup: false});
+      this.setState({showPopup: false, showSubjectsPopup: false, showLPPopup: false});
     }
   }
 
@@ -274,6 +272,10 @@ export class StudentTableRow extends Component {
       this.setState({showSubjectsPopup: true})
     }
 
+  }
+
+  editLP() {
+    this.setState({showLPPopup: true})
   }
 
   render() {
@@ -290,7 +292,7 @@ export class StudentTableRow extends Component {
             <button className="view" onClick={()=>this.editSubjects()}>Set Subject(s)</button>
             <button className="approve" onClick={()=>this.onClickRegister()}>Remove</button>
 
-            {this.state.showPopup ? <SetSubjectsPopup subjects = {this.props.subjects} id = {this.props.studentID} allSubjects = {this.props.allSubjects} grade = {this.props.grade} call={this.closePopup} type="NewStudent" className="popup"/> : null}
+            {this.state.showPopup ? <SetSubjectsPopup subjects = {this.props.subjects} id = {this.props.studentID} allSubjects = {this.props.allSubjects} grade = {this.props.grade} otherInfo={this.props.otherInfo} call={this.closePopup} type="NewStudent" className="popup"/> : null}
           </tr>
         );
       }
@@ -312,8 +314,10 @@ export class StudentTableRow extends Component {
 
           <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
           <button className="view" onClick={()=>this.editSubjects()}>Edit Subjects</button>
+          <button className="view" onClick={()=>this.editLP()}>View/Edit LP</button>
           {this.state.showPopup ? <ViewUserPopup data={this.props.allData} subjects = {this.state.subjectstring} call={this.closePopup} type="Student" className="popup"/> : null}
           {this.state.showSubjectsPopup ? <SetSubjectsPopup subjects = {this.props.subjects} id={this.props.studentID} allSubjects={this.props.allSubjects} call={this.closePopup} type="student" className="popup"/> : null}
+          {this.state.showLPPopup ? <LearningPlanPopup data = {this.props.allData} call={this.closePopup} className="popup"/> : null}
           </tr>
       );
     }

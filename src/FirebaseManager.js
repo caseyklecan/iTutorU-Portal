@@ -11,12 +11,12 @@ const config = {
 */
 
 const config = {
-  apiKey: "AIzaSyDIEOu99SaPq8TSdT_ep2EqrzhaDUFJ36Y",
-  authDomain: "itutoru-megan-refactor.firebaseapp.com",
-  databaseURL: "https://itutoru-megan-refactor.firebaseio.com",
-  projectId: "itutoru-megan-refactor",
-  storageBucket: "itutoru-megan-refactor.appspot.com",
-  messagingSenderId: "842705651129"
+  apiKey: "AIzaSyBsjlF4FNxju6ise_-PRyyD2ZhPVwyoev4",
+    authDomain: "itutoru-ef7e2.firebaseapp.com",
+    databaseURL: "https://itutoru-ef7e2.firebaseio.com",
+    projectId: "itutoru-ef7e2",
+    storageBucket: "itutoru-ef7e2.appspot.com",
+    messagingSenderId: "115499384435"
 }
 
 export function approveTutor(uid) {
@@ -107,7 +107,9 @@ export function returnUnregisteredStudents() {
                       phone: childSnapshot.val().phoneNumber,
                       address: studentInfo.val().address,
                       subjects: studentInfo.val().subject,
-                      grade: studentInfo.val().grade}
+                      grade: studentInfo.val().grade,
+                      otherInfo: studentInfo.val().otherInfo,
+                    }
                     //console.log("info:");
                     //console.log(info);
                     info_list.push(info);
@@ -387,7 +389,7 @@ export function updateStudent(updatedInfo) {
     studentName: updatedInfo.name,
     grade: updatedInfo.grade,
     address: updatedInfo.city,
-
+    paidSessions: updatedInfo.paidSessions,
   });
 }
 

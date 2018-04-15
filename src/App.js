@@ -118,7 +118,7 @@ class App extends Component {
              : null
            }
 
-           {this.state.areNewStudents ?
+           {this.state.unregisteredStudents.length > 0 ?
             <div className="content">
               <h2><center>New Students</center></h2>
               <StudentTable className="tutorTable" data = {this.state.unregisteredStudents} subjects = {this.state.subjects} registering = {true} />

@@ -30,6 +30,7 @@ class StudentTable extends Component {
             grade = {item.grade}
             allSubjects = {this.props.subjects}
             studentID = {item.studentID}
+            otherInfo = {item.otherInfo}
           />
         }
         )

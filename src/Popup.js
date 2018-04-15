@@ -51,6 +51,7 @@ export class SetSubjectsPopup extends React.Component {
   state = {
     subjects: [],
     checkedSubjects: [],
+    hasOtherInfo: true,
   }
 
   componentWillMount() {
@@ -68,6 +69,9 @@ export class SetSubjectsPopup extends React.Component {
     if (this.props.type === "student") {
       //add current subjects to checkedSubjects
       this.setState({checkedSubjects: this.props.subjects})
+    }
+    if (this.props.otherInfo === undefined) {
+      this.setState({hasOtherInfo: false})
     }
   }
 
@@ -131,6 +135,7 @@ export class SetSubjectsPopup extends React.Component {
         <div className="popup" style={{ height: '80%', width: '60%'}}>
 
           <h3>{`Parent wrote: \"${this.props.subjects}\"`}</h3>
+          {this.state.hasOtherInfo ? <h4>{`Other info: \"${this.props.otherInfo}\"`}</h4> : null}
           <h4>Grade: {this.props.grade}</h4>
           <h4><center>Select matching subjects below:</center></h4>
 
@@ -195,10 +200,11 @@ export class ViewUserPopup extends React.Component {
     studentNames: [],
     subjects: [],
     updatedInfoTutor: {ID: '', name: '', email: '', phone: '', city: '', degree: '', city: '', subjects: ''},
-    updatedInfoStudent: {ID: '', name: '', city: '', subject: '', grade: ''},
+    updatedInfoStudent: {ID: '', name: '', city: '', subject: '', grade: '', paidSessions: 0},
     isEditing: false,
     editText: "Edit",
     props: {},
+    paidSessions: 0,
   }
   componentWillMount() {
    this.state.props = this.props;
@@ -215,22 +221,11 @@ export class ViewUserPopup extends React.Component {
        this.state.subjects = this.props.subjects;
      }
    }
-   /*
-   else {
-     console.log("STUDENT");
-     console.log(this.props.data.childData.subjects.length);
-     if (this.props.data.childData.subjects.length > 1) {
-       for (var i = 0; i < this.props.data.childData.subjects.length; i++) {
-         this.state.subjects += this.props.data.childData.subjects[i];
-         if (i != this.props.data.childData.subjects.length - 1) this.state.subjects += ", ";
-       }
-     }
-     else {
-       this.state.subjects = this.props.subjects;
-     }
-   }
-*/
+
    this.setState(this.state);
+   if (this.props.data.data.paidSessions != undefined) {
+     this.setState({paidSessions: this.props.data.data.paidSessions});
+   }
  }
 
  showStudents() {
@@ -273,9 +268,16 @@ export class ViewUserPopup extends React.Component {
        <h4>Subject(s): {this.props.subjects}</h4>
        <h4>Address: {this.state.props.data.data.address}</h4>
        <h4>Grade: {this.state.props.data.data.grade}</h4>
+       <h4>Paid Sessions: {this.state.paidSessions}</h4>
        </div>
      );
    }
+ }
+
+ handleChangePaidSessions(num) {
+   this.state.paidSessions = num;
+   this.state.updatedInfoStudent.paidSessions = num;
+   this.setState(this.state);
  }
 
  showEditable(type) {
@@ -320,6 +322,21 @@ export class ViewUserPopup extends React.Component {
              Grade:
              <input type="text" value={this.state.updatedInfoStudent.grade} onChange={(event) => this.handleChangeStudentGrade(event)} />
            </label>
+           <label>Number of paid sessions:</label>
+           <div>
+            <label>
+              0
+              <input type="radio" name="gender" value="zero" onChange={(event) => this.handleChangePaidSessions(0)}/>
+            </label>
+            <label>
+              4
+              <input type="radio" name="gender" value="four" onChange={(event) => this.handleChangePaidSessions(4)}/>
+            </label>
+            <label>
+              8
+              <input type="radio" name="gender" value="eight" onChange={(event) => this.handleChangePaidSessions(8)}/>
+            </label>
+           </div>
          </form>
        );
 
@@ -427,6 +444,27 @@ export class ViewUserPopup extends React.Component {
       <div className="popup">
         {!this.state.isEditing ? this.showData(this.props.type) : this.showEditable(this.props.type)}
         <button onClick = {()=>this.editInfo()} className="closeButton">{this.state.editText}</button>
+        <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
+      </div>
+      </Modal>
+
+
+    );
+  }
+}
+
+export class LearningPlanPopup extends React.Component {
+  render() {
+    return (
+      <Modal
+        aria-labelledby='modal-label'
+        style={modalStyle}
+        backdropStyle={backdropStyle}
+        show={true}
+        onHide={this.close}
+        >
+      <div className="popup">
+
         <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
       </div>
       </Modal>
