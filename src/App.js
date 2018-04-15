@@ -132,14 +132,14 @@ class App extends Component {
 
     //uid is the student's uid
     //data is the learning plan aka the obj returned from students/uid/learningplan
-    var uid = '-LA-RdMG6iXkB7yYipbM';
-    return(
-      <LearningPlan
-        studentName={"Bobby"}
-        data={defaultLP}
-        studentuid={uid}
-      />
-    );
+    // var uid = '-LA-RdMG6iXkB7yYipbM';
+    // return(
+    //   <LearningPlan
+    //     studentName={"Bobby"}
+    //     data={defaultLP}
+    //     studentuid={uid}
+    //   />
+    // );
 
 
 
@@ -148,101 +148,101 @@ class App extends Component {
 
 
 
-    // if (this.state.loggedIn) {
-    //   return (
-    //     <div className="App">
-    //       <header className="App-header">
-    //         <h1 className="App-title">iTutorU Admin</h1>
-    //         <button className="settings" onClick={() => this.showSettings()} className="approve">Settings</button>
-    //       </header>
-    //
-    //        {this.state.showSettings ?
-    //          <SettingsPopup subjects={this.state.subjects} call={this.closePopup} />
-    //          : null
-    //        }
-    //
-    //        {this.state.areNewStudents ?
-    //         <div className="content">
-    //           <h2><center>New Students</center></h2>
-    //           <StudentTable className="tutorTable" data = {this.state.unregisteredStudents} subjects = {this.state.subjects} registering = {true} />
-    //         </div>
-    //         : null
-    //       }
-    //
-    //
-    //       <div className="content">
-    //         <Tabs>
-    //           <TabList>
-    //             <Tab>Pending Tutors</Tab>
-    //             <Tab>Active Tutors</Tab>
-    //             <Tab>Active Students</Tab>
-    //             <Tab>Tutor-Student Pairs</Tab>
-    //             <Tab>Rejected Tutors</Tab>
-    //           </TabList>
-    //
-    //           <TabPanel>
-    //             <h2>Pending tutors</h2>
-    //             {this.state.arePendingTutors ? <TutorTable className="tutorTable" data={this.state.pendingTutors} subjects = {this.state.subjects} pending = {true} /> : <h4>No pending tutors at this time.</h4> }
-    //           </TabPanel>
-    //
-    //           <TabPanel>
-    //             <h2>Active Tutors</h2>
-    //             <TutorTable className="tutorTable" data={this.state.tutorData} subjects = {this.state.subjects}pending = {false} />
-    //           </TabPanel>
-    //
-    //           <TabPanel>
-    //             <h2>Active Students</h2>
-    //             <StudentTable className="tutorTable" data = {this.state.studentData} subjects = {this.state.subjects} registering = {false} />
-    //           </TabPanel>
-    //
-    //           <TabPanel>
-    //               <h2>Tutor-Student Pairs</h2>
-    //               <PairsTable className="tutorTable" data = {this.state.pairData} />
-    //
-    //           </TabPanel>
-    //
-    //           <TabPanel>
-    //             <h2>Rejected Tutors</h2>
-    //             <TutorTable className="tutorTable" data = {this.state.tutorData} rejected = {true} />
-    //           </TabPanel>
-    //         </Tabs>
-    //       </div>
-    //
-    //     </div>
-    //   );
-    // }
-    // else if (this.state.loggedIn == null) {
-    //   return(
-    //     <div>
-    //       <h1><center>Loading..</center></h1>
-    //     </div>
-    //
-    //   );
-    // }
-    // else {
-    //   return (
-    //     <div className="App">
-    //       <header className="App-header">
-    //         <h1 className="App-title-before">iTutorU Admin</h1>
-    //       </header>
-    //       <div className="login">
-    //
-    //           <label>Email:<br />
-    //           <input type="text" name="email" id="emailInput" />
-    //           </label><br />
-    //           <label>Password:<br />
-    //           <input type="password" name="password" id="passInput" />
-    //           </label> <br />
-    //           <input type="button" className="closeButton" value="Log In" onClick={() => {
-    //             var email = document.getElementById("emailInput").value;
-    //             var pass = document.getElementById("passInput").value;
-    //             this.onClickLogin(email, pass);
-    //           }}/>
-    //
-    //       </div>
-    //     </div>
-    //   )
-    // }
+    if (this.state.loggedIn) {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <h1 className="App-title">iTutorU Admin</h1>
+            <button className="settings" onClick={() => this.showSettings()} className="approve">Settings</button>
+          </header>
+
+           {this.state.showSettings ?
+             <SettingsPopup subjects={this.state.subjects} call={this.closePopup} />
+             : null
+           }
+
+           {this.state.areNewStudents ?
+            <div className="content">
+              <h2><center>New Students</center></h2>
+              <StudentTable className="tutorTable" data = {this.state.unregisteredStudents} subjects = {this.state.subjects} registering = {true} />
+            </div>
+            : null
+          }
+
+
+          <div className="content">
+            <Tabs>
+              <TabList>
+                <Tab>Pending Tutors</Tab>
+                <Tab>Active Tutors</Tab>
+                <Tab>Active Students</Tab>
+                <Tab>Tutor-Student Pairs</Tab>
+                <Tab>Rejected Tutors</Tab>
+              </TabList>
+
+              <TabPanel>
+                <h2>Pending tutors</h2>
+                {this.state.arePendingTutors ? <TutorTable className="tutorTable" data={this.state.pendingTutors} subjects = {this.state.subjects} pending = {true} /> : <h4>No pending tutors at this time.</h4> }
+              </TabPanel>
+
+              <TabPanel>
+                <h2>Active Tutors</h2>
+                <TutorTable className="tutorTable" data={this.state.tutorData} subjects = {this.state.subjects}pending = {false} />
+              </TabPanel>
+
+              <TabPanel>
+                <h2>Active Students</h2>
+                <StudentTable className="tutorTable" data = {this.state.studentData} subjects = {this.state.subjects} registering = {false} />
+              </TabPanel>
+
+              <TabPanel>
+                  <h2>Tutor-Student Pairs</h2>
+                  <PairsTable className="tutorTable" data = {this.state.pairData} />
+
+              </TabPanel>
+
+              <TabPanel>
+                <h2>Rejected Tutors</h2>
+                <TutorTable className="tutorTable" data = {this.state.tutorData} rejected = {true} />
+              </TabPanel>
+            </Tabs>
+          </div>
+
+        </div>
+      );
+    }
+    else if (this.state.loggedIn == null) {
+      return(
+        <div>
+          <h1><center>Loading..</center></h1>
+        </div>
+
+      );
+    }
+    else {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <h1 className="App-title-before">iTutorU Admin</h1>
+          </header>
+          <div className="login">
+
+              <label>Email:<br />
+              <input type="text" name="email" id="emailInput" />
+              </label><br />
+              <label>Password:<br />
+              <input type="password" name="password" id="passInput" />
+              </label> <br />
+              <input type="button" className="closeButton" value="Log In" onClick={() => {
+                var email = document.getElementById("emailInput").value;
+                var pass = document.getElementById("passInput").value;
+                this.onClickLogin(email, pass);
+              }}/>
+
+          </div>
+        </div>
+      )
+    }
   }
 }
 
