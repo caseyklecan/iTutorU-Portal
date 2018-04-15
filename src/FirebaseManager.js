@@ -424,5 +424,47 @@ export function getConversation(studentID, tutorID) {
     }).catch((error) => {reject(error);});
 
   });
+}
+
+//Learning Plan
+export function addCard(studentuid, cardItem, index) {
+    firebase.database().ref('students/' + studentuid + "/learningPlan").update({
+        [index] : cardItem,
+    })
+}
+
+export function onUpdateTasks(studentuid, cardIndex, tasks) {
+    firebase.database().ref('students/' + studentuid + '/learningPlan').update({
+        [cardIndex + '/list'] : tasks,
+    });
+}
+
+export function onCardMarkComplete(studentuid, cardIndex) {
+    firebase.database().ref('students/' + studentuid + '/learningPlan').update({
+        [cardIndex + '/complete'] : true,
+    })
+}
+
+export function onChangeTitle(studentuid, cardIndex, title) {
+    firebase.database().ref('students/' + studentuid + '/learningPlan').update({
+        [cardIndex + '/title'] : title,
+    })
+}
+
+export function setLP(studentuid, lp) {
+  console.log("now going to firebase");
+  console.log(lp);
+  firebase.database().ref('students/' + studentuid).update({
+    learningPlan : lp,
+  }).then(console.log("done"));
+  console.log("done 2");
 
 }
+
+// export function getLP(studentuid) {
+//   return new Promise((resolve, reject) => {
+//     firebase.database().ref('students/' + studentuid + '/learningPlan').once('value', function(snapshot) {
+//         resolve(snapshot.val());
+//     });
+//   })
+// }

@@ -6,6 +6,9 @@ import PairsTable from './PairsTable';
 import SettingsPopup from './SettingsPopup';
 import './App.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import LearningPlan from './LearningPlan';
+
+import { getLP } from './FirebaseManager';
 
 
 class App extends Component {
@@ -105,6 +108,46 @@ class App extends Component {
     }
 
   render() {
+    // var defaultLP = [
+    //     {
+    //         complete: false,
+    //         index: 0,
+    //         list: [
+    //             {
+    //                 complete: true,
+    //                 description: 'Tap \'Edit Plan\' to make changes',
+    //             },
+    //             {
+    //                 complete: false,
+    //                 description: 'Structuring learning plan cards by weekly tasks is a good start'
+    //             },
+    //             {
+    //                 complete: false,
+    //                 description: 'Don\'t forget to edit the learning plan card title!',
+    //             }
+    //         ],
+    //         title: 'Sample Learning Plan'
+    //     }
+    // ]
+
+    //uid is the student's uid
+    //data is the learning plan aka the obj returned from students/uid/learningplan
+    // var uid = '-LA-RdMG6iXkB7yYipbM';
+    // return(
+    //   <LearningPlan
+    //     studentName={"Bobby"}
+    //     data={defaultLP}
+    //     studentuid={uid}
+    //   />
+    // );
+
+
+
+
+
+
+
+
     if (this.state.loggedIn) {
       return (
         <div className="App">
