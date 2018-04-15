@@ -286,3 +286,59 @@ input[type=submit] {
 .checkboxLabel {
   flex: 9;
 }
+
+.learningPlan {
+  text-align: center;
+  border: 1px solid red;
+}
+
+.learningPlan .new-button {
+  margin: 10px;
+}
+
+.learningPlanCard {
+  width: 500px;
+  border: 1px solid black;
+  box-sizing:content-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.learningPlanListItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px dashed lightgray;
+  //border-radius: 10px;
+  overflow: hidden;
+  margin: 5px;
+  width: 100%;
+}
+
+.learningPlanListItem p {
+  display: block;
+  //border: 1px solid green;
+  margin: auto 0;
+  padding: 5px;
+}
+
+.learningPlanListItem .form-check-input {
+  align-self: center;
+  margin-top: 0px;
+}
+
+.complete {
+  background-color: gray;
+}
+
+.learningPlanCard input {
+  max-width: 95%;
+}
+
+.learningPlanCard .title {
+  text-align: center;
+}
