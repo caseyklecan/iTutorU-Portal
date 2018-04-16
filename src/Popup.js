@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-overlays';
-import {getStudentsOfTutor, updateTutor, updateStudent, deleteFromFirebase, returnSubjects, updateSubjects, returnStudent} from './FirebaseManager';
+import {getStudentsOfTutor, updateTutor, updateStudent, returnSubjects, updateSubjects,
+  returnStudent, updateLPNotes, getMessage, getConversation} from './FirebaseManager';
 import LearningPlan from './LearningPlan';
 
 const modalStyle = {
@@ -56,17 +57,6 @@ export class SetSubjectsPopup extends React.Component {
   }
 
   componentWillMount() {
-    /*
-    if (this.props.type === 'NewStudent') {
-      //load subjects
-      console.log("loading subjects");
-      returnSubjects().then(res => {
-        this.state.subjects = res;
-        this.setState(this.state);
-      });
-
-    }
-    */
     if (this.props.type === "student") {
       //add current subjects to checkedSubjects
       this.setState({checkedSubjects: this.props.subjects})
@@ -172,7 +162,7 @@ export class SetSubjectsPopup extends React.Component {
 }
 
 
-export class ApprovedPopup extends React.Component {
+export class TextPopup extends React.Component {
   render() {
     return (
       <Modal
@@ -210,29 +200,11 @@ export class ViewUserPopup extends React.Component {
   }
   componentWillMount() {
    this.state.props = this.props;
-   console.log(this.props);
-   if (this.props.type === "Tutor") {
-     if (this.props.data.childData.subjects.length > 1) {
-       for (var i = 0; i < this.props.data.childData.subjects.length; i++) {
-         this.state.subjects += this.props.data.childData.subjects[i];
-         if (i != this.props.data.childData.subjects.length - 1) this.state.subjects += ", ";
-       }
-       console.log(this.state.subjects);
-     }
-     else {
-       this.state.subjects = this.props.subjects;
-     }
-     this.setState(this.state);
-   }
-   else {
-     console.log(this.props.data.data.paidSessions);
+   if (this.props.type === "Student") {
      if (this.props.data.data.paidSessions != undefined) {
-       console.log("IN IF STATEMENT!!")
        this.setState({paidSessions: this.props.data.data.paidSessions});
      }
    }
-
-
  }
 
  showStudents() {
@@ -247,6 +219,18 @@ export class ViewUserPopup extends React.Component {
 
  }
 
+ showSubjects() {
+   console.log(this.props.subjects);
+   return (
+     this.props.data.childData.subjects.map((sub) => {
+       return (
+       <li>{sub}</li>
+       );
+     })
+   );
+
+ }
+
  showData(type) {
    //approved tutor
    console.log(this.state.props);
@@ -256,7 +240,7 @@ export class ViewUserPopup extends React.Component {
        <h4><center>{this.state.props.data.childData.name} ({this.state.props.type})</center></h4>
 
        <p>Subject(s):</p>
-       <p style={{color:'gray'}}> {this.state.subjects}</p>
+       <p style={{color:'gray'}}> {this.showSubjects()}</p>
 
        <p>City:</p>
        <p style={{color: 'gray'}}> {this.state.props.data.childData.city}</p>
@@ -344,18 +328,17 @@ export class ViewUserPopup extends React.Component {
              <input type="text" value={this.state.updatedInfoStudent.grade} onChange={(event) => this.handleChangeStudentGrade(event)} />
            </label>
            <label>Number of paid sessions:</label>
-           <div>
-            <label>
-              0
-              <input type="radio" name="gender" value="zero" onChange={(event) => this.handleChangePaidSessions(0)}/>
+           <div className="radioDiv">
+            <label className="radioDiv">
+              0 <input className = "radio" type="radio" name="gender" value="zero" onChange={(event) => this.handleChangePaidSessions(0)}/>
             </label>
-            <label>
+            <label className="radioDiv">
               4
-              <input type="radio" name="gender" value="four" onChange={(event) => this.handleChangePaidSessions(4)}/>
+              <input className="radio" type="radio" name="gender" value="four" onChange={(event) => this.handleChangePaidSessions(4)}/>
             </label>
-            <label>
+            <label className="radioDiv">
               8
-              <input type="radio" name="gender" value="eight" onChange={(event) => this.handleChangePaidSessions(8)}/>
+              <input className="radio" type="radio" name="gender" value="eight" onChange={(event) => this.handleChangePaidSessions(8)}/>
             </label>
            </div>
          </form>
@@ -468,13 +451,33 @@ export class ViewUserPopup extends React.Component {
         <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
       </div>
       </Modal>
-
-
     );
   }
 }
 
 export class LearningPlanPopup extends React.Component {
+  state = {
+    officeNotes: '',
+  }
+
+  componentWillMount() {
+    if (this.props.data.data.officeNotes != undefined) {
+      this.state.officeNotes = this.props.data.data.officeNotes;
+      this.setState(this.state);
+    }
+  }
+
+  handleUpdateNotes(event) {
+    this.state.officeNotes = event.target.value;
+    this.setState(this.state);
+  }
+
+  onClickClose() {
+    this.props.call(false);
+    var id = this.props.data.key;
+    updateLPNotes(id, this.state.officeNotes);
+  }
+
   render() {
     return (
       <Modal
@@ -491,13 +494,115 @@ export class LearningPlanPopup extends React.Component {
           data={this.props.data.data.learningPlan}
           studentuid={this.props.data.key}
          />
+           <h4>Notes from the office:</h4>
+           <form>
+             <input type="text" value={this.state.officeNotes} onChange={(event) => this.handleUpdateNotes(event)}/>
+           </form>
       </div>
-        <button onClick={()=>this.props.call(false)} className="closeButton">Close</button>
 
+        <button onClick={()=>this.onClickClose()} className="closeButton">Close</button>
       </div>
       </Modal>
 
 
+    );
+  }
+}
+
+export class MessagesPopup extends React.Component {
+  state = {
+    showModal: true,
+    messages:[],
+    messageData: [],
+    studentName: '',
+    tutorName: '',
+    firstName: '',
+    secondName: '',
+  }
+
+  onClickClose() {
+    this.setState({showModal : false})
+  }
+
+  componentWillMount() {
+    var messages = [];
+    getConversation(this.props.data.studentID, this.props.data.tutorID).then(res => {
+      console.log("got conversation");
+      messages = res;
+      this.setState({messages: messages});
+      this.setState(this.state);
+      for (var i = 0; i < messages.length; i++) {
+        getMessage(messages[i]).then(res => {
+          this.state.messageData.push(res);
+          this.setState(this.state);
+          if (this.state.messageData.length == 1) {
+            var firstName = '';
+            var secondName = '';
+
+            firstName=this.state.studentName;
+            secondName=this.state.tutorName;
+
+            this.setState({ firstName });
+            this.setState({ secondName });
+          }
+        })
+      }
+    });
+    this.setState({ studentName: this.props.data.studentInfo.studentName });
+    this.setState({ tutorName: this.props.data.tutorInfo.name});
+  }
+
+  showData() {
+    //map through all messages
+    if (this.state.messageData.length > 0) {
+      return (this.state.messageData.map((item) => {
+        var leftID = this.props.data.studentID;
+        if (item.from === leftID) {
+          return (
+            <div className="messageLeft">
+              <p className="sender">{this.state.firstName}</p>
+              <div className="messageBodyLeft">
+                <p>{item.text}</p>
+                <p className="time">{item.time}</p>
+              </div>
+            </div>
+          );
+        }
+        else {
+          return (
+            <div className="messageRight">
+              <p className="sender">{this.state.secondName}</p>
+              <div className="messageBodyRight">
+                <p>{item.text}</p>
+                <p className="time">{item.time}</p>
+              </div>
+            </div>
+          );
+        }
+      })
+    );
+
+    }
+  }
+
+  render() {
+    return (
+        <Modal
+          aria-labelledby='modal-label'
+          style={modalStyle}
+          backdropStyle={backdropStyle}
+          show={true}
+          onHide={this.close}
+          >
+        <div className="popup" style={{ height: '80%'}}>
+          <div className="popup-data-settings">
+            {this.showData()}
+          </div>
+          <button onClick={()=>{
+            this.props.call(false);
+          }} className="closeButton">Close</button>
+        </div>
+      </Modal>
     );
   }
 }

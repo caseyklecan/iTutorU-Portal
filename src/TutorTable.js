@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import TableRow from './TableRow';
+import TutorTableRow from './TableRow';
 import './App.css';
 
 class TutorTable extends Component {
+
+  state = {
+    noRejected: false,
+  }
 
   renderRows() {
     var tutor_list = []
@@ -36,17 +40,13 @@ class TutorTable extends Component {
       }
     }
 
-
-
     if (this.props.rejected && tutor_list.length === 0) {
-      if (tutor_list.length === 0) {
-        return <h3>No rejected tutors.</h3>
-      }
+      this.setState({noRejected: true})
     }
     else {
       return(
         tutor_list.map((item) => {
-          return <TableRow
+          return <TutorTableRow
             name={item.childData.name}
             subjects={item.childData.subjects}
             city={item.childData.city}
@@ -63,19 +63,30 @@ class TutorTable extends Component {
   }
 
   render() {
-    return (
-      <table>
-        <tbody>
-        <tr>
-          <th>Tutor</th>
-          <th>Subject(s)</th>
-          <th>City</th>
-          <th>Options</th>
-        </tr>
-        {this.renderRows()}
-        </tbody>
-      </table>
-    );
+    if (this.state.noRejected) {
+      return (
+        <div>
+          <h3>No rejected tutors.</h3>
+        </div>
+      );
+    }
+    else {
+      return (
+        <table>
+          <tbody>
+          <tr>
+            <th>Tutor</th>
+            <th>Subject(s)</th>
+            <th>City</th>
+            {this.props.pending ? <th>Hiring Checklist</th> : null}
+            <th style={{width: '30%'}}>Options</th>
+          </tr>
+          {this.renderRows()}
+          </tbody>
+        </table>
+      );
+
+    }
   }
 }
 

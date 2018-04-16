@@ -16,8 +16,6 @@ class StudentTable extends Component {
     if (this.props.registering == true) {
       return(
         student_list.map((item) => {
-          console.log("HELLOOOOOOOO");
-          console.log(item);
           return <StudentTableRow
             studentName={item.studentName}
             parentName={item.parentName}
@@ -76,7 +74,7 @@ class StudentTable extends Component {
       );
     }
     else {
-      //shows table headers for students tab
+      //shows table headers for active students table
       return (
         <table>
           <tbody>

@@ -37,14 +37,16 @@ class LearningPlanItem extends Component {
         <div className="learningPlanCard">
         <input className="form-control title" value={item.title} onChange={(event) => this.props.onChangeTitle(event.target.value)}/>
 
-            {item.list.map((listitem, index) => {
-              return(
-                <div className="learningPlanListItem">
-                  <input className="form-control" value={listitem.description} onChange={(event) => this.onEditText(index, event.target.value)} />
-                  <button type="button" className="btn btn-sm btn-danger" onClick={() => this.props.onRemoveTask(index)}>Delete</button>
-                </div>
-              );
-            })}
+          {item.list != undefined ? item.list.map((listitem, index) => {
+            return(
+              <div className="learningPlanListItem">
+                <input className="form-control" value={listitem.description} onChange={(event) => this.onEditText(index, event.target.value)} />
+                <button type="button" className="btn btn-sm btn-danger" onClick={() => this.props.onRemoveTask(index)}>Delete</button>
+              </div>
+            );
+          })
+          : null}
+
 
             <div className="learningPlanListItem">
               <input className="form-control" placeholder="New task..." value={this.state.newItem} onChange={(event) => this.setState({ newItem: event.target.value }) }/>
@@ -78,14 +80,15 @@ class LearningPlanItem extends Component {
       return(
         <div className="learningPlanCard">
           <h3>{item.title}</h3>
-          {item.list.map((listitem, index) => {
+          {item.list != undefined ? item.list.map((listitem, index) => {
             return(
               <div className="learningPlanListItem">
-
                 <p>{listitem.description}</p>
               </div>
             );
-          })}
+          })
+          : null}
+
           <div className="flex-row">
             <button className="btn btn-primary" onClick={() => this.setState({ editing: true })}>Edit Plan</button>
             <button className="btn btn-secondary" onClick={() => this.props.onCardMarkComplete()}>Mark Complete</button>
@@ -111,6 +114,7 @@ class LearningPlan extends Component {
         nextIndex: 1,
         currentlyEditing: null,
         studentuid: '',
+        officeNotes: '',
   }
 
   componentWillMount() {
@@ -122,7 +126,8 @@ class LearningPlan extends Component {
       title: "New Card",
       list: [],
       complete: false,
-      index: this.state.nextIndex
+      index: this.state.nextIndex,
+      officeNotes: '',
     }
 
     this.state.data.push(newCard);

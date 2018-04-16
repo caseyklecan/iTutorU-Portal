@@ -97,23 +97,61 @@
   background-color: white;
 }
 
-.approve {
-  background-color: #FF0000;
+.blue {
+  background-color: #007AFF;
   color: white;
   font-size: medium;
   padding: 10px;
   border-radius: 3px;
-  border-color: #FF0000;
-  transition-duration: .6s;
+  border-color: #007AFF;
+  transition-duration: .4s;
   margin-right: 4%;
   margin-top: 2%;
   margin-bottom: 1%;
   margin-left: 2%;
 }
 
-.approve:hover {
-  color: #FF0000;
+.green {
+  background-color: #64db02;
+  color: white;
+  font-size: medium;
+  padding: 10px;
+  border-radius: 3px;
+  border-color: #64db02;
+  transition-duration: .4s;
+  margin-right: 4%;
+  margin-top: 2%;
+  margin-bottom: 1%;
+  margin-left: 2%;
+}
+
+.red {
+  background-color: #FF0000;
+  color: white;
+  font-size: medium;
+  padding: 10px;
+  border-radius: 3px;
+  border-color: #FF0000;
+  transition-duration: .4s;
+  margin-right: 4%;
+  margin-top: 2%;
+  margin-bottom: 1%;
+  margin-left: 2%;
+}
+
+.blue:hover {
+  color: #007AFF;
   background-color: white;
+}
+
+.red:hover {
+  color: #FF0000;
+  background-color:white;
+}
+
+.green:hover {
+  color: #64db02;
+  background-color:white;
 }
 
 .view {
@@ -193,6 +231,11 @@ table {
   width: 100%;
 }
 
+.deleteButton:hover {
+  color: #FF0000;
+  background-color:white;
+}
+
 .closeButton {
   background-color: #007AFF;
   color: white;
@@ -203,6 +246,11 @@ table {
   transition-duration: .6s;
   margin-top: 2%;
   width: 100%;
+}
+
+.closeButton:hover {
+  color: #007AFF;
+  background-color:white;
 }
 
 .login {
@@ -272,6 +320,15 @@ input[type=submit] {
   padding: 0;
   font-weight: bold;
   font-size: 13px;
+}
+
+.radioDiv {
+  display: flex;
+  flex-direction: row;
+}
+
+.radio {
+  flex: 1;
 }
 
 .checkboxDiv {

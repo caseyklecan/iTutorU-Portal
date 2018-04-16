@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import {ApprovedPopup, ViewUserPopup, PendingPopup, SetSubjectsPopup, LearningPlanPopup} from './Popup';
+import {TextPopup, ViewUserPopup, PendingPopup, SetSubjectsPopup, LearningPlanPopup, MessagesPopup} from './Popup';
 import './App.css';
-import MessagesPopup from './MessagesPopup';
 import { getConversation, registerStudent, getStudentsOfTutor, returnStudent, approveTutor, rejectTutor, updateCheckboxes } from './FirebaseManager';
 
-export default class TableRow extends Component {
-  //FOR TUTORS
+export default class TutorTableRow extends Component {
   state = {
     showPopup: false,
-    buttonText: this.props.pending ? "Contact" : "View",
+    buttonText: this.props.pending ? "Contact" : "View/Edit",
     pending: this.props.pending,
     approved: false,
     subjects: '',
     students: [],
 
-    /* only add all these to the database if one is checked */
     checkboxes: {interviewed: false, checkedRefs: false, madeHiringDecision: false, sentFingerprintDocs: false, cleared: false, sentW9: false, sentWelcome: false}
   }
 
@@ -37,13 +34,11 @@ export default class TableRow extends Component {
         this.setState({ studentIDs: res});
         res.map((studentID) => {
           returnStudent(studentID).then(res2 => {
-            console.log(res2.val());
             this.state.students.push(res2.val().studentName);
           })
         })
       },
       this.setState(this.state),
-      console.log(this.state.students),
     );
     }
     else {
@@ -73,7 +68,6 @@ export default class TableRow extends Component {
   }
 
   onClickReject() {
-    {/*this.setState({pending:false, approved: false}) delete from database*/}
     this.setState({showResultPopup: true, approved: false});
     rejectTutor(this.props.allData.childKey);
   }
@@ -96,7 +90,6 @@ export default class TableRow extends Component {
     }
     this.setState(this.state);
     updateCheckboxes(this.props.allData.childKey, this.state.checkboxes);
-
   }
 
   showCheckList() {
@@ -175,21 +168,33 @@ export default class TableRow extends Component {
     );
   }
 
+  showSubjects() {
+    console.log(this.props.subjects);
+    return (
+      this.props.subjects.map((sub) => {
+        return (
+        <li>{sub}</li>
+        );
+      })
+    );
+
+  }
+
   render() {
     //pending tutors table
     if (this.props.pending) {
       return (
         <tr>
           <td>{this.props.name}</td>
-          <td>{this.state.subjects}</td>
+          <td>{this.showSubjects()}</td>
           <td>{this.props.city}</td>
-          <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
+          <td>{this.showCheckList()}</td>
+          <button className="blue" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
           {this.state.showPopup ? <PendingPopup data={this.props.allData} call={this.closePopup} /> : null}
-          <button className="view" onClick={() => this.onClickApprove()}>Approve</button>
-          <button className="approve" onClick={() => this.onClickReject()}>Reject</button>
-          {this.state.showResultPopup && this.state.approved ? <ApprovedPopup text="Tutor is approved!" call={this.closePopup} /> : null}
-          {this.state.showResultPopup && !this.state.approved ? <ApprovedPopup text="Applicant is rejected." call={this.closePopup} /> : null}
-          {this.showCheckList()}
+          <button className="green" onClick={() => this.onClickApprove()}>Approve</button>
+          <button className="red" onClick={() => this.onClickReject()}>Reject</button>
+          {this.state.showResultPopup && this.state.approved ? <TextPopup text="Tutor is approved!" call={this.closePopup} /> : null}
+          {this.state.showResultPopup && !this.state.approved ? <TextPopup text="Applicant is rejected." call={this.closePopup} /> : null}
         </tr>
       );
     }
@@ -197,9 +202,9 @@ export default class TableRow extends Component {
       return (
         <tr>
           <td>{this.props.name}</td>
-          <td>{this.state.subjects}</td>
+          <td>{this.showSubjects()}</td>
           <td>{this.props.city}</td>
-          <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
+          <button className="blue" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
           {this.state.showPopup ? <ViewUserPopup data={this.props.allData} subjects = {this.state.subjects} call={this.closePopup} type="Tutor" students = {this.state.students} /> : null}
         </tr>
       );
@@ -237,7 +242,6 @@ export class StudentTableRow extends Component {
       else {
         this.state.subjectstring = this.props.subjects;
       }
-      //this.state.subjectstring += " ";
       this.setState(this.state);
     }
 
@@ -245,10 +249,7 @@ export class StudentTableRow extends Component {
 
 
   onClickView() {
-
     this.setState({ showPopup: true})
-
-
   }
 
   onClickRegister() {
@@ -264,8 +265,6 @@ export class StudentTableRow extends Component {
 
   editSubjects() {
     if (this.props.registering) {
-      //open popup and pass in subject info
-      console.log("subjects: " + this.props.subjects);
       this.setState({showPopup: true})
     }
     else {
@@ -276,6 +275,18 @@ export class StudentTableRow extends Component {
 
   editLP() {
     this.setState({showLPPopup: true})
+  }
+
+  showSubjects() {
+    console.log(this.props.subjects);
+    return (
+      this.props.subjects.map((sub) => {
+        return (
+        <li>{sub}</li>
+        );
+      })
+    );
+
   }
 
   render() {
@@ -289,8 +300,8 @@ export class StudentTableRow extends Component {
             <td>{this.props.email}</td>
             <td>{this.props.address}</td>
             <td>{this.props.phone}</td>
-            <button className="view" onClick={()=>this.editSubjects()}>Set Subject(s)</button>
-            <button className="approve" onClick={()=>this.onClickRegister()}>Remove</button>
+            <button className="blue" onClick={()=>this.editSubjects()}>Set Subject(s)</button>
+            <button className="red" onClick={()=>this.onClickRegister()}>Remove</button>
 
             {this.state.showPopup ? <SetSubjectsPopup subjects = {this.props.subjects} id = {this.props.studentID} allSubjects = {this.props.allSubjects} grade = {this.props.grade} otherInfo={this.props.otherInfo} call={this.closePopup} type="NewStudent" className="popup"/> : null}
           </tr>
@@ -309,12 +320,12 @@ export class StudentTableRow extends Component {
       return (
         <tr>
           <td>{this.props.studentName}</td>
-          <td>{this.state.subjectstring}</td>
+          <td>{this.showSubjects()}</td>
           <td>{this.props.grade}</td>
 
-          <button className="view" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
-          <button className="view" onClick={()=>this.editSubjects()}>Edit Subjects</button>
-          <button className="view" onClick={()=>this.editLP()}>View/Edit LP</button>
+          <button className="blue" onClick={()=>this.onClickView()}>{this.state.buttonText}</button>
+          <button className="blue" onClick={()=>this.editSubjects()}>Edit Subjects</button>
+          <button className="blue" onClick={()=>this.editLP()}>View/Edit LP</button>
           {this.state.showPopup ? <ViewUserPopup data={this.props.allData} subjects = {this.state.subjectstring} call={this.closePopup} type="Student" className="popup"/> : null}
           {this.state.showSubjectsPopup ? <SetSubjectsPopup subjects = {this.props.subjects} id={this.props.studentID} allSubjects={this.props.allSubjects} call={this.closePopup} type="student" className="popup"/> : null}
           {this.state.showLPPopup ? <LearningPlanPopup data = {this.props.allData} call={this.closePopup} className="popup"/> : null}
@@ -335,8 +346,6 @@ export class PairsTableRow extends Component {
 
   componentWillMount() {
     getConversation(this.props.studentID, this.props.tutorID).then(res => {
-      console.log("got conversation");
-      console.log(res);
       if (res != null) {
         this.setState({messagesExist: true});
       }

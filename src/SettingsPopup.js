@@ -16,8 +16,6 @@ const backdropStyle = {
 };
 
 class SettingsPopup extends React.Component {
-
-
   state = {
     showModal: true,
     subjects: this.props.subjects,
@@ -42,10 +40,8 @@ class SettingsPopup extends React.Component {
               <label className="checkboxLabel">
                 {sub}
               </label>
-
             </div>
           );
-
         })}
         <label>
           New Subject:
@@ -56,11 +52,16 @@ class SettingsPopup extends React.Component {
         </form>
       </div>
     );
-
   }
 
   handleCheck(event, sub) {
-    this.state.checkedSubjects.push(sub);
+    var ind = this.state.checkedSubjects.indexOf(sub);
+    if (ind != -1) {
+      this.state.checkedSubjects.splice(ind, 1);
+    }
+    else this.state.checkedSubjects.push(sub);
+
+    this.setState(this.state);
   }
 
   deleteSubjects() {
@@ -71,19 +72,14 @@ class SettingsPopup extends React.Component {
       }
       this.setState(this.state);
     });
-    {/*  todo: connect with firebase */}
     updateAllSubjects(this.state.subjects);
   }
 
   addSubject() {
-
     this.state.subjects.push(this.state.newSubject);
     this.state.newSubject = "";
     this.setState(this.state);
-
-    {/* TODO: handle connect with firebase */}
     updateAllSubjects(this.state.subjects);
-
   }
 
   handleAddNewSubject(event) {

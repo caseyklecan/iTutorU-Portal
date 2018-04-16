@@ -3,8 +3,6 @@ import { Modal } from 'react-overlays';
 import { getConversation, getMessage, returnStudent, returnTutor } from './FirebaseManager';
 import './App.css';
 
-
-
 let rand = ()=> (Math.floor(Math.random() * 20) - 10);
 
 const modalStyle = {
@@ -23,8 +21,7 @@ const backdropStyle = {
   opacity: 0.5
 };
 
-
-class MessagesPopup extends React.Component {
+export class MessagesPopup extends React.Component {
   state = {
     showModal: true,
     messages:[],
@@ -41,9 +38,6 @@ class MessagesPopup extends React.Component {
 
   componentWillMount() {
     var messages = [];
-    console.log("PROPS");
-    console.log(this.props);
-    //console.log("STATE: " + JSON.stringify(this.props));
     getConversation(this.props.data.studentID, this.props.data.tutorID).then(res => {
       console.log("got conversation");
       messages = res;
@@ -53,9 +47,7 @@ class MessagesPopup extends React.Component {
         getMessage(messages[i]).then(res => {
           this.state.messageData.push(res);
           this.setState(this.state);
-
           if (this.state.messageData.length == 1) {
-            //console.log("MESSAGES LENGTH: " + this.state.messages.length);
             var firstName = '';
             var secondName = '';
 
@@ -65,33 +57,17 @@ class MessagesPopup extends React.Component {
             this.setState({ firstName });
             this.setState({ secondName });
           }
-
         })
       }
-
-      console.log("messages: " + JSON.stringify(messages));
-
     });
-
-
     this.setState({ studentName: this.props.data.studentInfo.studentName });
     this.setState({ tutorName: this.props.data.tutorInfo.name});
-
-
-
-
   }
 
   showData() {
     //map through all messages
-    console.log("messages:");
-    console.log(this.state.messages);
     if (this.state.messageData.length > 0) {
-
-
       return (this.state.messageData.map((item) => {
-        console.log(item);
-        //var firstID = this.state.messageData[0].from;
         var leftID = this.props.data.studentID;
         if (item.from === leftID) {
           return (
@@ -119,13 +95,7 @@ class MessagesPopup extends React.Component {
     );
 
     }
-
-
-
-
   }
-
-
 
   render() {
     return (
