@@ -345,3 +345,8 @@ input[type=submit] {
 .learningPlanCard .title {
   text-align: center;
 }
+
+p {
+  margin: 2px;
+  padding: 0px;
+}

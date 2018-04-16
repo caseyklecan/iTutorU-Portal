@@ -206,6 +206,7 @@ export class ViewUserPopup extends React.Component {
     editText: "Edit",
     props: {},
     paidSessions: 0,
+
   }
   componentWillMount() {
    this.state.props = this.props;
@@ -221,14 +222,17 @@ export class ViewUserPopup extends React.Component {
      else {
        this.state.subjects = this.props.subjects;
      }
+     this.setState(this.state);
    }
    else {
+     console.log(this.props.data.data.paidSessions);
      if (this.props.data.data.paidSessions != undefined) {
+       console.log("IN IF STATEMENT!!")
        this.setState({paidSessions: this.props.data.data.paidSessions});
      }
    }
 
-   this.setState(this.state);
+
  }
 
  showStudents() {
@@ -249,14 +253,22 @@ export class ViewUserPopup extends React.Component {
    if (type === "Tutor") {
      return (
        <div>
-       <h2>{this.state.props.data.childData.name}</h2>
-       <h4>{this.props.type}</h4>
-       <h4>Subject(s): {this.state.subjects}</h4>
-       <h4>City: {this.state.props.data.childData.city}</h4>
-       <h4>Degree: {this.state.props.data.childData.degree}</h4>
-       <h4>Phone Number: {this.state.props.data.childData.phone}</h4>
+       <h4><center>{this.state.props.data.childData.name} ({this.state.props.type})</center></h4>
 
-       <h3>Students</h3>
+       <p>Subject(s):</p>
+       <p style={{color:'gray'}}> {this.state.subjects}</p>
+
+       <p>City:</p>
+       <p style={{color: 'gray'}}> {this.state.props.data.childData.city}</p>
+
+       <p>Degree:</p>
+       <p style={{color: 'gray'}}> {this.state.props.data.childData.degree}</p>
+
+
+       <p>Phone Number:</p>
+       <p style={{color: 'gray'}}> {this.state.props.data.childData.phone}</p>
+
+       <p>Students:</p>
        {this.showStudents()}
 
 
@@ -266,12 +278,18 @@ export class ViewUserPopup extends React.Component {
    else {
      return (
        <div>
-       <h4>{this.state.props.data.data.studentName}</h4>
-       <h4>{this.props.type}</h4>
-       <h4>Subject(s): {this.props.subjects}</h4>
-       <h4>Address: {this.state.props.data.data.address}</h4>
-       <h4>Grade: {this.state.props.data.data.grade}</h4>
-       <h4>Paid Sessions: {this.state.paidSessions}</h4>
+        <h4><center>{this.state.props.data.data.studentName} ({this.state.props.type})</center></h4>
+
+        <p>Subject(s):</p>
+        <p style={{color:'gray'}}> {this.state.props.subjects}</p>
+
+        <p>Address:</p>
+        <p style={{color: 'gray'}}> {this.state.props.data.data.address}</p>
+
+        <p>Grade:</p>
+        <p style={{color: 'gray'}}> {this.state.props.data.data.grade}</p>
+
+        {this.props.data.data.paidSessions != undefined ? <p>Paid Sessions: {this.state.paidSessions}</p> : <p>Paid Sessions: 0</p>}
        </div>
      );
    }
