@@ -13,7 +13,8 @@ const config = {
 
 /* returns true if a user is signed in. Called in componentWillMount() of App.js */
 export function isSignedIn() {
-  firebase.initializeApp(config);
+  console.log(firebase.apps);
+  if (firebase.apps.length == 0) firebase.initializeApp(config);
   return new Promise((resolve, reject) => {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user != null) {

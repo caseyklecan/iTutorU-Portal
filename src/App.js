@@ -12,6 +12,7 @@ import LearningPlan from './LearningPlan';
 class App extends Component {
   constructor(props) {
     super(props);
+    console.log("constructor");
     this.onClickLogin = this.onClickLogin.bind(this);
     this.loadData = this.loadData.bind(this);
   }
@@ -39,6 +40,7 @@ class App extends Component {
   }
 
   loadData() {
+    console.log("LOAD DATA CALLED");
     returnTutorData().then(res => {
         this.setState({ tutorData: res});
     }),
@@ -70,7 +72,8 @@ class App extends Component {
         this.setState({ pairData: res });
     });
 
-    this.setState({loggedIn: true})
+    this.setState({loggedIn: true});
+    console.log("STATE SET LOGGED IN TRUE");
   }
 
   onClickLogin(email, password) {
