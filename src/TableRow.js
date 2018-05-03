@@ -28,12 +28,16 @@ export default class TutorTableRow extends Component {
     }
     this.setState(this.state);
 
+    console.log("PROPS::");
+    console.log(this.props);
     //get students for approved tutor
     if (!this.props.pending) {
       getStudentsOfTutor(this.props.allData.childKey).then(res => {
+        console.log(res);
         this.setState({ studentIDs: res});
         res.map((studentID) => {
           returnStudent(studentID).then(res2 => {
+            console.log(res2.val());
             this.state.students.push(res2.val().studentName);
           })
         })
@@ -293,6 +297,7 @@ export class StudentTableRow extends Component {
     //pending student
     if (this.props.registering) {
       if (!this.state.registered) {
+        console.log("EMAIL: " + this.props.email);
         return (
           <tr>
             <td>{this.props.parentName}</td>

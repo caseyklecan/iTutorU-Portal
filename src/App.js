@@ -45,6 +45,7 @@ class App extends Component {
 
     returnUnregisteredStudents().then(res => {
       this.setState({unregisteredStudents: res});
+      console.log(this.state.unregisteredStudents);
       if (this.state.unregisteredStudents.length > 0) {
         this.setState({areNewStudents: true});
       }

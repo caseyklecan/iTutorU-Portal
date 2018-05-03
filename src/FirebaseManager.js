@@ -185,6 +185,7 @@ export function returnTutor(uid) {
 
 /* returns student given uid */
 export function returnStudent(uid) {
+  console.log("uid: " + uid);
   return new Promise((resolve, reject) => {
     firebase.database().ref('students/' + uid).once('value').then(function(snapshot) {
           resolve(snapshot);
