@@ -31,6 +31,7 @@ class App extends Component {
   }
 
   componentWillMount() {
+    console.log("COMPONENT WILL MOUNT");
     isSignedIn().then(res => {
       this.loadData();
       this.setState({ loggedIn: true })
@@ -81,7 +82,9 @@ class App extends Component {
         userType(user.uid).then(type => {
         if (type === 'admin') {
             this.loadData();
-            //this.setState({loggedIn: true});
+            this.setState({loggedIn: true});
+        } else {
+          console.log(type);
         }})
     });
   }
